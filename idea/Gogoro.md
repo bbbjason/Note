@@ -1,0 +1,1 @@
+Gogoro的主要利潤來自電網，因此不必擔心Goshare分食Gogoro機車的生意。Goshare能擴大Gogoro 電網的使用率

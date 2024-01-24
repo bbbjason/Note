@@ -1,0 +1,177 @@
+{
+  "main": {
+    "id": "f0c79415f667e7af",
+    "type": "split",
+    "children": [
+      {
+        "id": "844a7064099fb704",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "3f6b12717e24819d",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {}
+            }
+          }
+        ],
+        "stacked": true
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "910a27262af925d5",
+    "type": "split",
+    "children": [
+      {
+        "id": "37cc285014bc3f60",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "48518603cec1fa11",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "e97c689ca8866e84",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "0c3f20648ff14e49",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "5190db7dd4136d40",
+    "type": "split",
+    "children": [
+      {
+        "id": "a957197a3e5c52a5",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "19701c25732e652a",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "61b91e8b591a1900",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "84c6c816fb960857",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "8ba0ac25068c0d39",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {}
+            }
+          },
+          {
+            "id": "2f7d48de36bc7f05",
+            "type": "leaf",
+            "state": {
+              "type": "chatbot-view",
+              "state": {}
+            }
+          }
+        ],
+        "currentTab": 4
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "obsidian-excalidraw-plugin:Create new drawing": false,
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "3f6b12717e24819d",
+  "lastOpenFiles": [
+    "Untitled/Untitled",
+    "Untitled",
+    "霜淇淋.md",
+    "網路效應.md",
+    "規模化.md",
+    "病毒性行銷.md",
+    "科技體.md",
+    "科技指標.md",
+    "建造那些錢買不到的事物.md",
+    "不要把work和job劃上等號.md",
+    "大海才是船的設計師.md",
+    "VimGPT.md",
+    "The Rule Book vs. Real Life.md",
+    "Task 3.md",
+    "political correctness.md",
+    "MetaGPT.md",
+    "How to distinguish between a tech bubble and a tech paradigm shift.md",
+    "Gogoro.md",
+    "Untitled.canvas",
+    "3MT/Untitled.md",
+    "3MT/Topic.md",
+    "3MT"
+  ]
+}

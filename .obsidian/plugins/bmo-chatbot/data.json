@@ -1,0 +1,35 @@
+{
+  "apiKey": "",
+  "max_tokens": "",
+  "model": "solar:latest",
+  "allModels": [
+    "llama2:latest",
+    "midjourney-prompt-generator:latest",
+    "mixtral:latest",
+    "solar:latest",
+    "zephyr:latest"
+  ],
+  "system_role": "",
+  "temperature": 1,
+  "userName": "USER",
+  "chatbotName": "BMO",
+  "chatbotContainerBackgroundColor": "--background-secondary",
+  "userMessageBackgroundColor": "--background-primary",
+  "botMessageBackgroundColor": "--background-secondary",
+  "chatHistoryPath": "BMO/",
+  "templateFilePath": "",
+  "openAIBaseUrl": "https://api.openai.com/v1",
+  "ollamaRestAPIUrl": "http://localhost:11434",
+  "ollamaModels": [
+    "llama2:latest",
+    "midjourney-prompt-generator:latest",
+    "mixtral:latest",
+    "solar:latest",
+    "zephyr:latest"
+  ],
+  "allowOllamaStream": false,
+  "localAIRestAPIUrl": "",
+  "localAIModels": [],
+  "referenceCurrentNote": false,
+  "allowRenameNoteTitle": false
+}

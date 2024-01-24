@@ -1,0 +1,1 @@
+Publishers have been editing original works to remove politically incorrect language.

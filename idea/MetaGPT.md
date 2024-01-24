@@ -1,0 +1,3 @@
+MetaGPT是由多個ai agent組合起來的。最基本的組合包括一個PM(負責理解用戶指令和規劃子目標)，一個architectures(負責訂功能模塊) 和一個Engineer(負責寫code)。我讓MetaGPT寫一個貪食蛇的python遊戲，PM就會訂spec然後叫archi和engineer去完成。但程序跑到一半就卡住了，不知道是不是我用gpt3.5的關係。整體來說，MetaGPT類似之前AutoGPT的進階版本。
+
+Multi-LLM的發展現狀如何？可以找一些Multi-LLM的paper
