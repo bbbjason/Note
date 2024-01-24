@@ -4,16 +4,16 @@
     "type": "split",
     "children": [
       {
-        "id": "cade6e53f99e58e2",
+        "id": "6b571a7d80c42694",
         "type": "tabs",
         "children": [
           {
-            "id": "d5b0019c56eadbc0",
+            "id": "b63a73e9abb8948f",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "idea/Adverse Selection.md",
+                "file": "idea/情報的冗餘.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "idea/Adverse Selection.md",
+                "file": "idea/情報的冗餘.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "idea/Adverse Selection.md",
+                "file": "idea/情報的冗餘.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "idea/Adverse Selection.md"
+                "file": "idea/情報的冗餘.md"
               }
             }
           },
@@ -158,14 +158,17 @@
       "bmo-chatbot:BMO Chatbot": false
     }
   },
-  "active": "d5b0019c56eadbc0",
+  "active": "96c4bfa10f9df915",
   "lastOpenFiles": [
+    "idea/情報的冗餘.md",
+    "idea/科技指標.md",
+    "idea/How to distinguish between a tech bubble and a tech paradigm shift.md",
+    "idea/Adverse Selection.md",
     "通貨膨脹.md",
     "idea/通貨膨脹.md",
     "idea/The Feynman Technique.md",
     "idea/The Feynman Technique 1.md",
     "如何學習.md",
-    "idea/Adverse Selection.md",
     "idea/網路效應.md",
     "idea/對工作沒有熱情怎麼辦.md",
     "idea/建造那些錢買不到的事物.md",
@@ -184,10 +187,7 @@
     "idea/翻譯prompt.md",
     "Untitled",
     "idea/如何做出選擇.md",
-    "idea/科技指標.md",
     "idea/科技體.md",
-    "idea/六頂思考帽.md",
-    "HW/Task 3.md",
     "Diary",
     "Excalidraw"
   ]
