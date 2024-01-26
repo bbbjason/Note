@@ -1,0 +1,1408 @@
+那在嗜好開始介紹之前的話
+提醒同學
+可能有些同學已經收到通知
+就是在申請製程的時候
+有些同學漏交了資料
+包括在學證明
+那這個可能助教會再通知大家
+請大家補
+那另外就是有很多的同學
+都沒有去TSRI申請帳號
+那這樣子的話
+也沒有辦法讓你的這個身份
+可以通過TSRI那邊的認證
+所以請同學如果
+還沒有在TSRI上面有帳號的話
+我們之前應該有一份
+講義上有提到
+怎麼樣去申請帳號
+請同學就趕快去申請帳號
+那由我這邊的話
+會去認可大家的身份
+那那個宇辰有沒有
+需要一開始先宣布一下的事項
+我會再寄就是請同學補在學證明
+然後因為有些人交的是上學期的
+然後沒有這學期的註冊長
+所以一定要有這個學期的
+然後再請這些同學補教
+然後我會以寄信的方式
+寄給這些同學這樣
+OK好
+好那接下來的話呢
+就把時間交給世豪
+好那我就開始今天的課程
+那大家好
+我是陳世豪助教
+那接下來這兩週會有我介紹
+新的還有關於那個
+Gate Level Simulation的課程
+好那在這次課程裡面
+我會介紹幾個重點
+那第一個是簡介
+那接下來會從RTL Coding的部分
+和Synthesis有關的RTL Coding部分
+先跟大家介紹
+那後面會介紹合成相關的環境
+那比較重要的
+還有花比較長篇幅介紹的是
+整個Synthesis的過程
+它裡面所用的Fold
+那包含有一些需要用到的檔案
+還有相關的指定
+那後面會有Gate Level Simulation的指定
+和需要include的檔案
+跟一些Files
+好那首先我就簡介一下
+Login的形式是什麼
+好那在前幾週的課程裡面
+那同學們應該學習到了
+就是可合成的Vlog
+就是RTL的Code是要怎麼樣去寫的
+那在接下來這兩週
+就跟大家介紹這個RTL Code
+要經過Login Synthesis這個步驟
+去合成出Gate Level
+Gate Level指的是
+像是AND NAND OR
+那個Inverter FIFAP之類的
+這一些Gate所組成一個NAND List
+那基本上我們首先延續前幾週
+因為在跟這個合成有關的部分
+RTL Coding有一些內容要注意
+而且有一些特殊指定要介紹
+所以這部分
+第一部分會從RTL Coding開始講起
+那接下來會講到
+合成所需要用到一些軟體跟指定
+那在合成的這個過程之中
+我們需要提供
+大致上可以區分成兩大類的訊息
+那第一個是跟製程比較有關的
+這些Gate的製程
+還有它們的Timing訊息有關的
+一個部分
+是Standard Cell Library的資訊
+那這些Cell裡面的Delay啦
+或者是Function之類的
+這些會幫助我們在做這個合成的時候
+要做Mapping
+第二個部分是比較偏Designer這端的
+我們要自己去下的Constraints
+那Constraints就是各種不一樣的條件
+還有不一樣的限制
+那例如說我們希望Clock跑多快
+我們希望Input Output
+有什麼樣的條件或是情境
+還有我們希望這個Gate Level Analysis
+它在速度或者是它在面積上面
+它目標是達到多少的
+那所以有Cell的資訊
+有Designer自己下的Constraints的資訊
+可以幫助我們把RTL合成一個Gate Level的Netlist
+那再仔細說一下
+就是一個Syndesis的步驟
+那Syndesis的步驟大致可以分成兩個部分
+那第一個是把RTL的Code
+翻譯成GTAC
+那個Generate Booting GTAC這個格式
+那大家可以想像GTAC是一種中繼的格式
+那它不是真正的Gate Level Analysis
+它是就是有一些中繼的Gate
+那中繼的加減乘除
+還有中繼的Register這些
+那先把RTL翻譯成一個類似Gate Level的Netlist
+那第二步是要把這個中繼的GTAC
+轉成真正我們需要的Gate Level Analysis
+那這個過程就是Authentization加Mapping
+那這一步會花
+明顯是花最長的時間
+這部分會引入我們給定的Timing訊息
+那我們給定的關於
+譬如說Clock或者是Power
+或是Area之類的Constraints
+這個部分會做最佳化
+那就會節帶比較多次
+好 那在合成的裡面的第一步是Translation
+也就是轉GTAC
+那我們可以從右邊這個圖看得出來說
+GTAC它只是單純的把RTL給翻譯過來而已
+那這個基本上是一個功能上正確
+但是是一個大概的格式
+那譬如說可以在圖裡面看到
+這邊的加減乘除的Operator
+都不是真的展開到Gate Level
+而是先有一個GTAC的Symbol
+先有一個這樣子的Module可以去替代它
+然後在RTL Code裡面的Free Flop
+也就是Register
+也會有一個GTAC的Free Flop去表示它
+但它一樣是沒有劃減過
+只是單純把這個翻譯過來而已
+好 那這邊講GTAC的幾個性質
+第一個是GTAC是Technology Independent
+這個意思是GTAC的內容只有和RTL相關
+是和製程沒有關係的
+那譬如說用.13,.18,40奈米之類的
+什麼製程跟GTAC是沒有關係的
+那第二個是還沒有引入Timing的Information
+那譬如說我們要把它Operating在一個
+200M的Frequency
+那這個東西也是和GTAC無關的
+這個就純粹把RTL翻譯過來
+那Synapse裡面的第二個大步驟
+是Optinization加Mapping
+那從這個範例裡面可以看得出來
+這裡的加點層出都已經被展開了
+那Free Flop也換成一個實際的Cell
+那這個就是我用.13去合成的一個範例這樣子
+那為了把GTAC給Optinize
+還有Mapping成一個Gate Level Analyst
+那我們提到的Standard Cell Library
+就需要去引入過來
+那就是Foundry,例如說TSNZ台積電
+提供我們的End Gate, End Gate, All Gate, Free Fire之類的
+各種邏輯雜,各種Gates
+所以這裡面就是實際我們用
+Technology Library裡面的Standard Cell
+所去Map出來的
+而不是像GTAC只是一個中繼格式
+好,那第二個是我們需要去引入速度
+或者是面積之類的一系列不一樣的限制條件
+限制條件也就是Constraints
+所以有了Library,有了Constraints
+那個Design Compiler就會把GTAC裡面的這些東西
+都Map到更底層,更底層
+就是Gate Level的一個Analyst
+那稍微給大家一個概念是
+從GTAC轉Gate Level這個過程
+通常會在Synthesize裡面花最多的
+就是花比較多的時間
+因為這個Mapping是一個最佳化問題
+最佳化問題
+因為它會一直去Try不一樣的邏輯雜組合
+去更換其中的一部分
+依照我們的Constraints去更換一部分
+然後這樣不斷不斷的去接待
+那就盡可能會去合成一個
+表現最佳的Gate Level Analyst
+所以就希望各位大概有個概念
+那我們後面再下所有的Constraints
+下環境設定,下指定
+都是跟這一個Updating的過程有關的
+好,那剛才說的Optionization
+會依照我們的Constraints
+去合成建讀這一件事情
+那我們就進一步把這個過程
+去講清楚一點
+那依照Constraints去合成建讀
+會有一個衍生到一個蠻重要的概念
+希望各位了解的是
+在不同的Constraints之間會有Trade-off
+就是我們Given同一套RTL
+那同一個Cell Library
+那給的Constraints不一樣
+也會有不同的結果
+那比較常用到的例如說是
+電路的速度和電路的面積
+那例如這份RTL寫出來的Module
+我們希望它在Timing上面
+速度條件上面比較嚴苛的話
+我們可能就需要一些比較大
+或比較多一些的Gate才能夠達到
+那反過來說
+如果我們不要求速度太快
+那我們合成在Updating的時候
+反過來就可以把
+把總面積弄得合成的比較小
+那Delay用比較長的邏輯雜來使用
+那這樣就可以減少面積
+所以這邊這張圖就會看得出來說
+Given同一套RTL
+同一個Library的Cell
+它的速度和它的面積會是一個Trade-off
+那依照你現在的條件不一樣
+追求的目標不一樣
+所以這個就會有
+不一樣的合成出來的Netlist
+那如果是用不同的Technology
+就是不同套的Standard Cells去合成
+那這個Trade-off的Curve也會不太一樣
+所以這個Trade-off的概念是蠻重要的
+所以就希望各位去了解一下這樣子
+好 那前面簡介了合成有關的過程
+從RTL轉GTag再Optimize變成Netlist
+那接下來我們就從合成裡面的第一步
+也就是跟RTL有關
+跟Synthesys有關的RTL Coding
+開始跟各位介紹一下
+好 那前幾週的課程
+相信大家應該學到很多種
+就是VariLog的寫法
+那在VariLog裡面只有一部分的語法
+可以去對應到GayLevel的電路
+那另一部分就只能夠用在模擬
+就是也沒有辦法真的轉成GayLevel
+或許就大概只能用在TestBench之類的
+模擬的地方
+所以這邊就列舉一些那個不可合成的
+就是不能夠真的寫到你的Design裡面
+合成成Rogizar的語法
+那這邊就講幾個比較重要的就好了
+那Delay是不可合成的
+所以在 所以不能夠在Module裡面寫
+就是井字號數字之類的這個寫法
+那因為Delay我們剛才提到了
+Standard Type Library會告訴我們
+這個Sell實際上的Delay
+所以我們人為所寫的Delay
+是不能夠Map到GayLevel的
+然後Initial的這種Block
+還有ForkJoin的這種Block
+也都不能夠寫在Design
+只能夠使用AlwaysBlock
+通常啦 通常只能用AlwaysBlock
+那三個等號這種Case Identity
+也是不能使用的
+或者是就是金三號兩個等號這一種
+我們只能夠使用雙等號
+金三號等號的這樣的寫法
+那其他的部分就給大家自己參考
+還有那另外在寫RTL的時候
+要避免的一個情況是
+Combination No Logic的Loop
+就是例如下面這張圖
+那因為一般的邏輯是
+都是在依序進行的狀況底下
+我們可以依序去算出
+這串邏輯的每一個訊號
+那最快多久可以算完
+那最慢多久可以算完
+那這個算Delay的過程
+就是算是Static Time Analysis
+算是叫這個名字
+所以就可以知道我們的電路可以跑多快
+但是如果在上面這一種
+Combination Loop的時候
+在我們這邊
+原先運算完的訊號
+可能會再次透過這個Feedback
+去Overwrite
+去複寫掉我們原本的訊號
+那換言之
+我們沒有辦法去決定
+這個訊號什麼時候會算完
+所以我們就在RTL裡面
+就要避免這個寫法
+那我們用右邊這張圖來舉例
+那在這個Assign A等於B加A的狀態下
+我們的A訊號算完一次之後
+那又會回頭和B需要去相加
+那相加之後又會再革新一次A訊號
+那又再次跟B相加
+所以這樣子這個A的值
+在除非A跟B有特定的條件
+不然A這個值就會無法確定它
+什麼時候可以收斂
+什麼時候可以算完
+所以除非我們有特殊的目的
+那不然就是不能夠寫出這樣子的
+這種Combination loop
+那剛才講了一些不行的
+那這邊羅列了一些
+算是常用的可乘語法
+那我這邊就挑幾個Point來講
+那尤其是就
+就是特別跟大家講一下說
+它比較可能會合成出怎樣的
+大概合成出怎樣的電路
+那例如加減乘除
+這些Operator都是可以合成的
+那如果寫這些Operator的時候
+大概會對應到的電路呢
+加法或減法基本上就是對應到
+就是加法器減法器
+但是寫一個乘法的時候
+就會對應到就是好幾個加法器
+所以乘法的面積會比加法大得多
+那除法又比乘法還要複雜很多
+那所以如果真的寫了一個除
+那就會合成一個很大很大
+然後Delay也很慢的除法器
+所以真的要寫除的話
+就務必要小心使用
+那或者是自己要
+可以自己去刻一種除法來implement
+那不要使用Design Compiler預設的除法
+那通常會比較有效率一點
+那在大於小
+就是大於小於或者是大於等於小於部分
+那通常也是類似減法器的結構
+那Logical Shift的
+就是Shift的部分呢
+就是如果Shift是一個by
+是要Shift的bit數是一個Constant的話
+那就只是純粹的接線而已
+但是如果Shift的bit數是一個Variable
+就是可以Shift一bit兩bit或多bit
+那合成出來
+大致上會是一個Barely-O-Shifter
+那就是就是會需要有一個Network的接線
+那也會稍微比較大一點
+再來講講就是Always Block
+那這邊特別要提醒的是
+在寫Case或者是在寫If Else之類的
+Statement的時候呢
+就是務必要盡量把初始值給滿
+或者是把condition給寫滿
+那要不然的話會
+就是出現Latch之中我們不太希望的狀況
+好那接下來我們特別介紹兩種
+就是跟Synthesis有關的特殊的RT有餘法
+那其實這兩種寫法
+不一定真的需要用到
+但是就提供給各位當作一個Options這樣子
+那首先在左邊這個例子裡面
+就是它寫了Case
+但是並沒有給Default的選項
+所以在原本沒有Default
+就是沒有Default選項的時候
+如果出現了這三個以外的Case
+那基本上Apple必須要保持
+就是上一次就是保持剛才的Output值
+所以會有一個Latch
+那通常我們Designer是
+不希望有產生這個Latch的
+那如果我們在就是Case BCD後面加一個
+那個雙斜線Synapses for Case
+那這個特殊指令就會告訴合成器
+所有的Case都已經被覆蓋了
+那我們不需要產生一個Latch
+來去Handle其他的condition
+那其他的Case就是被當作Don't Care Term
+所以萬一BCD真的出現了其他Case
+那Output是什麼值都可以
+那這麼做的副作用就是
+我們在Design的時候
+要必須保證真的只有這三個Case會出現
+不會有其他狀況出現
+因為其他狀況已經被當成Don't Care Term了
+所以Output會是什麼值是我們不確定的
+好 那右邊是第二種
+那在一般的Case的余發裡面
+每個條件是有優先級的
+那Case1優先級最高
+那Case2是第二priority
+那第三個priority依序下去
+所以這樣子的先後priority
+是需要使用一些相應的硬體去產生的
+但是在有些狀況裡面
+就是不同的Case不會同時產生
+一次只有一個Case
+那這個時候我們這個Priority邏輯
+就是Redundant是不必要的
+所以這個時候使用這個Synaptic Parallel Case
+這個特殊余法放在這裡
+那就是特別告訴合成器
+就是不要產生優先
+不要產生Priority邏輯
+所以合成出來的硬體就會更簡單
+那當然跟前面類似的是
+我們Designer必須要保證
+這個一次只有一個人的前提是成立的
+不然的話Output一樣會被給予一個不確定的值
+那剛才的Forecase、Priority Case
+它們其實是有一個組合的用法
+那例如說我在寫這種
+每次只有一個訊號唯一的這種Control的時候
+可以使用Forecase、Priority Case
+那這有兩種寫法
+那第一種是就是把Select訊號放在Case裡面
+那把這個One-Hat訊號放在下面的French裡面
+那第二種是把1-bit-1放在這裡
+然後把三個Case分別放在下面這邊
+那其實這種寫法就稍微給大家參考一下
+那不一定需要用到也可以
+那RTL的最後一部分呢
+是還有一些額外的
+就需要RTL還有Synesthes的指定
+都互相配合的一些功能
+我這邊就先點到幾種功能可以去使用
+那其中有一部分會下禮拜介紹
+那其中一個是Clack Gating
+那Clack Gating指的就是
+我們對Clack訊號做特別處理
+讓它只有在Register的Transition要發生的時候
+才給它Clack訊號
+平常是沒有Clack訊號的
+或者是Multi-Cycle Path
+然後或者是Forced Path指的是
+我不要去分析這一段邏輯的timing
+然後還有Asynchronous的兩段邏輯
+那這些就是透過RTL跟Synesthes的互相幫助
+就是互相配合是可以達成的
+然後最後再提一點就是
+一般寫RTL的一些參考的原則
+那第一個是我們通常會把
+Combination Part和Sequential Part
+這兩個部分互相分開
+那Sequential Part就只會有Register
+跟很簡單的邏輯產生
+Combination就會有前面沒有Register
+那比較多數的邏輯
+然後在體積比較大的時候
+就是會把就是建議是可以把Control
+和其他的Summodules給分開
+然後如果是在主要是下線
+或者底線比較大的時候
+Input跟Output都會去擋一個Register
+那就可以避免掉一些
+一些Input Output上面的問題
+好 那接下來就是
+我會介紹一些關於Synesthes的Environment
+那包含我們會用到一些Tool
+那還有在裡面的一些名詞解釋
+還有我們在Design Compiler裡面的指令
+好 那我們整個合成裡面所需要用到
+最主要的Tool就是Design Compiler這個工具
+那就是前面講的那個
+Translate加Tradition加Mapping
+這些動作都會在Design Compiler裡面完成
+那Design Vision
+Design Vision則是Design Compiler的一個
+圖形化介面版本
+那就是如果需要去看一些Schematic
+就是看一些那個合成出來
+大概長什麼樣子的時候
+可以使用Design Vision
+或者是圖形化介面會有一些
+就是比較直覺比較方便的功能可以使用
+但是它的功能
+圖形化的功能就沒有包含
+Design Compiler裡面全部的功能
+那下面這些則是
+就是Invaded在Design Compiler裡面
+就是內建的好幾種功能
+那就是那個HDL Compiler可以幫我們轉GTAG
+那Design World在後面會介紹到
+會有一些Building Block
+或者是Operator可以使用
+那後面這個就後面我們提到的時候
+再跟各位介紹
+那在工作站裡面去打DT Shell
+就會顯示出這個
+就會顯示出裡面有嵌入的一些軟體功能
+所以Design Compiler打開來大概就是長這樣子
+那圖形化介面版本呢
+就是大概會長這樣子
+那可以從這邊叫出Schematic
+或者是裡面的Gay Level 介入
+那它可以自動的幫你去
+就是List出我們的
+我們Design的Hierarchy
+還有它的Pin跟Port
+那一些選項會比較直觀一點
+但是功能沒有那麼完全
+好 那我們要啟動Design Compiler的時候
+就在工作站裡面打
+就是先Source好相應的那個
+Chsrc檔
+Source好那個東西
+然後再打DT Shell
+然後如果我們要去打開
+就是圖形化的介面的話
+可以在工作站裡面打Design Vision
+或者是在DT Shell裡面加上
+Typen GUI
+就是Graphical User Interface這個flag
+那或者是你已經先打開了DT Shell
+那接下來中間任何一個時候
+你想要打開那個
+打開圖形化介面
+就在DT Shell裡面打那個GUI Start
+那如果你想要把那個
+圖形介面關掉就打GUI Stop
+好 那如果我們已經準備好了
+一些script要給DT Shell去使用的話
+那兩種用法
+第一個是DT Shell-f
+加上你寫好的那個comment script
+或者是你已經打開DT Shell的話
+你就在裡面使用src這個指令
+就可以去把這裡面的comment
+全部都執行一遍
+好 那在
+那我們實際上打開好Design Compiler
+那要跟裡面做互動的時候
+有三種方法
+那第一個是
+我們打開Design Compiler
+那這裡就有一個comment line的介面可以用
+那或者是你打開圖形介面之後
+這個comment line的介面
+是和這一個介面是等效的
+所以在這裡打和這裡打是一樣的
+或者是這裡有一些圖形化的功能使用
+那就另外提一下
+就是所有在圖形化介面裡面
+可以去執行的動作
+都會對應到一個或者是一組的指令這樣子
+那用這個來簡單舉個例
+就是你在圖形化介面裡面點好了一些選項
+那下面的comment就是點好選項
+按OK或者按apply之後
+下面的comment line就會出現一條或多一條指令
+那這個指令就是你剛才在圖形化介面做的事情
+所以就是可以用
+就是如果要試一些
+要去嘗試一些功能的話
+用圖形化介面點好之後
+下次可以把這個指令複製起來
+打成script
+就用這條指令就可以做
+達成完全一樣的結果
+接下來那個下一個部分是design objects
+也就是一些在design裡面的名詞解釋這樣子
+OK 那我們這邊就列出一些
+就是design compiler裡面會用到的名詞
+那我們就用這個東西做範例
+來做一個名詞解釋這樣子
+那因為這些名詞有些在後面的
+後面的合成的過程裡面會提到
+所以就先為各位介紹
+那首先我們在verylog裡面的這個
+這個module在合成環節裡面就叫做design
+那這個design的input跟output
+就是包含abcd clk跟out1
+在就是design的input output同稱為port
+那在這個design裡面它用到了encoder
+還有那個imv inverter
+還有rec file
+這三個就是這三個module
+那就是這些module會同稱為reference
+那每個reference它各自的input output
+稱作pin
+又說rec file的clk是一個pin
+我們用這三個reference創造了
+四個在電路裡面的那個東西
+那就叫做cell
+有時候u1 u2 u3 u4
+那接線的這個線
+我們這邊declare的wire就叫做net
+那就可以去接線
+那在合成的環境裡面
+就是clk這條net是非常獨特的
+那它需要很多特殊的處理
+所以clk這個我會特殊把它叫出來
+那這邊有剛才的blog diagram版本
+那大家就可以參考一下
+那這個clk就是特別specify
+它是一個有去為了一個
+就是在正義負義之間transition的一個signal
+所以這個clk是很重要的
+那因為我們後面很多的
+關於timing的東西
+都會跟著clk來進行分析
+OK那這邊就大概列一下
+就是每個東西它實際上面
+在這個圖裡面大概會對應到的list
+所以大家可以對照這張list去確認
+那這邊是這樣子
+OK那接下來
+下一個部分是要跟大家介紹
+在design compiler裡面
+如果你要打指定
+就是一些指定相關的basics這樣子
+好那就是design compiler裡面
+就是有很多很多的指定
+那這些指定可以統稱為tool command language
+就是如果你把
+就是如果你把
+如果你把很多指定給串起來
+打成一個文件的話
+就可以稱作ticle script
+那就是ticle這種格式
+也不是只有design compiler獨有的
+那如果需要更多資訊
+可以參考下面這些網站
+那一般來說在design compiler裡面
+會使用到ticle這個language的有
+那個其他寫的setup.dc
+還有一些你自己寫好的script
+和一些你自己寫好的constraints
+那這三個東西分別的用途呢
+首先第一個setup.dc
+指的是就是取為這個名字的檔案呢
+會在我們打入dc shell
+也就是dc被launch的時候
+它會自動的source這個檔案
+所以這個是在start的時候
+會自己source的
+所以通常來說
+我們在這裡面放一些
+跟library有關的東西
+或者是一些很基本
+每次打開design compiler
+都需要用的設定
+那至於ticle和sdc這邊就
+會包含了我們
+通常來說是包含了
+跑完整個design的合成所需要用的
+這個指定
+那sdc通常指的是裡面的
+關於design environment的設定
+還有關於design constraints的設定
+就是只有關於設定的部分
+那ticle這個部分則是會
+就是通常是會打
+各種像refile啊
+或者是sinuses之類
+還有source這個sdc的指定
+那就是整個流程的
+還有的指定的部分
+好
+那
+這邊就針對design compiler
+就是一般來說裡面
+會需要用到一些指定
+或是ticle語法來進行一些介紹
+那最一般來說的指定呢
+它的格式會是
+指定的名稱
+然後接下來可以跟著一些
+就是加了hyphen的options
+然後
+有一個簡單的例子
+像右邊的這個
+compile-help
+那這個help就是
+就是一個option
+那如果這個command它是有
+要對一些對象來進行作用的
+那後面就會接它的argument list
+好
+那在design compiler裡面
+下指定的時候
+指定的宗旨是使用換行
+或者是使用分號
+那
+如果你的指定太長了
+或者是在一些排版上面有需求的話
+同一個指定可以用反斜線
+來分開打
+例如說框框裡面的這個指定
+和上面的這個指定是等價的
+就是用
+反斜線可以
+可以打多行指定
+好那在
+在design compiler能夠吃的script裡面的
+註解符號是警制號
+那這邊就要特別注意一下
+只有在每一行的開頭才可以使用註解
+那所以
+在這邊
+下面這個是一個arrow example
+所以在中間
+在一行的中間開始使用註解是沒有辦法的
+就是不行的
+只有在開頭才能夠整行的使用註解
+好
+那我再介紹一下就是wildcard的這個東西
+wildcard也就是萬用字符
+萬用字符
+萬用字符也就是
+使用wildcard的字符可以對應到
+就是一個任意字元這樣子
+那在這邊就舉一個例子就是
+如果打
+使用信號的話
+信號可以對應到
+零個字元到多個字元的文字
+所以零個也是可以的
+所以用這樣子的card面就可以對應到
+例如說use或usage
+那如果是問號的話
+就是對應到一個字符的任意文字
+所以用這樣子的指令的話
+會得到的結果就是
+就是基本上是use或者是其他中間
+只有一個英文單字
+只有一個英文字母的
+好
+那如果在第三Compiler裡面
+要去查找我們的指令
+方法
+方法是打help
+那結合我們剛才講到的這個
+講到的這個wildcard的用法
+我們如果想要查找
+裡面包含了clock的所有指令的話
+我們可以打help
+然後前後都加信號包住clock
+那這樣子就可以得到所有關於clock的指令
+那如果
+如果想要針對其中一個指令
+那個獲得
+一些help的資訊的話
+就是可以打-help
+那如果針對一個指令想要獲得非常
+就是更詳細的資訊的話
+可以使用manual
+就是man
+然後空格你要的這個指令
+manual會有非常非常詳細的說明
+那篇幅也會比較長這樣子
+那這邊就額外放一些特殊字符
+那大家需要用到的時候
+就是可以參考一下這邊
+那接下來就是要介紹一下
+在裡面就是很常用的一些
+很常用的一些語法
+一些syntax
+那首先介紹set這個指令
+那set就是會幫一個變數去賦予一個值
+那在這邊例如說setb66
+我們就會把b這個變數b這個variable
+給予了66這個value這個值
+那setab會把變數a那個變成b這個
+這個就是這個字串
+但如果你實際上想要把b本來就具有的
+這個66的value塞給a的話必須要使用
+那個金錢符號b
+然後金錢符號b就是去呼叫b裡面所具有的value
+所以這邊所用的syntax就是這樣子
+金錢符號
+加上我們已經set好的variable名稱
+就會得到它本來的這個
+那我們就
+我在這邊舉一個實際運用的例子給大家看一下
+就是這邊我們就先那個
+專注在跟set還有金錢符號有關的expression
+所以在第一行指令這邊呢
+我們把大寫的design這個變數
+給賦予了top這個字串
+所以在第二條指令這裡呢
+就是getdesign是金錢符號design
+這個就會被取代成top這個字串
+所以它就相等於是getdesign
+然後top小寫top
+所以下面出來的結果就會成功的設定這個指令
+那最後這個指令呢就是
+也會把金錢符號design取代成top
+所以
+超過這個指令所生成出來的
+的這個
+這個東西
+這個file name也就會是top check design
+這個就如我們所希望的金錢符號跟set的用法
+好那
+接下來
+剛才介紹過set那接下來
+介紹另一部分常用指令是
+get開頭我還有all開頭的指令
+那get比較常用的那例如說getsells,getdesigns
+還有getclocks,getports之類的
+那all常用的比較是allinput跟alloutput之類的指令
+好那這兩個指令的用途呢都是在
+design compiler就是目前現有的工作環境裡面
+去查找出你所想要的這個object
+然後並且用一個list來去return給你
+那這邊就看一下這個範例好了
+那首先第一個指令呢是
+那個
+第一個指令是去設定電容的最大值
+那它所作用的對象呢
+就是在這裡getports信號
+那getports信號指的是所有的ports
+那因為信號是wildcard自傳
+所以它就會對應到所有的ports
+所以這個指令就會讓
+所有的ports的backspot capacitance被設為0.1這樣子
+那下面這個指令呢是另一個範例
+那它的工作它的用途是set agio network
+那它所作用的對象是getports
+然後
+呃
+信號clk信號
+那這個getports的指令呢就會從所有的ports裡面
+找出具有clk自傳的這些ports
+那這些ports就會被當成作用對象
+然後被執行set agio network
+然後下面也是類似的狀況
+那提一下是這邊就提一下說
+只有get是可以依照你自己打的名字
+來去做search去return一個list
+那or是沒有辦法去依照given的name去查找
+去查找的or就只能指定所有人
+所以下面這個例子就給大家自己參考一下
+好那剛剛介紹完了get指令
+那就就讓大家一起來練習一下就是
+呃
+首先的問題就是我們要打什麼樣的get指令
+才會得到我們要的這個問題的解答
+所以我們希望找到這個list
+就是這個這個design所有的ports
+所以使用的指令就是getports
+那要不要加信號都是可以的
+第二題是
+我們希望找到呃
+找到所有的cell
+那其中是包含了u這個字符的cell
+那所以使用的指令就會是
+get cell然後指定的對象會是
+信號u信號
+因為這樣子的wildcard expression
+信號會對應到一個或多個字符
+就是零個或者是零個到多個字符
+所以這樣就可以獲得所有
+呃包含了u的這個
+的cells
+好那接下來第三個是
+我們希望找到所有的nets
+那所有使用clk這個字串結尾的nets
+所以我們使用的指令就是
+getnets加上
+信號clk
+因為希望用clk結尾
+所以只有前面能加wildcard
+那接下來我們希望找到所有的qpins
+那這邊我們稍微re
+稍微re call一下
+這邊在這邊所有pins的那個definition
+所有pins的格式都是
+跟著一個就是
+跟著一個cell後面才會有這個pins
+所以我們希望找到所有的qpins呢
+我們必須要
+用wildcard的character來去
+specify所有的cells
+好那如果要找所有的references就是
+就是get references
+那信號要不要加打的結果是一樣的
+好那這邊再一個額外的練習是
+我們
+打了剛才那個指令之後
+我們會return出來的結果可能是什麼這樣子
+那所以在這個design裡面所有的ports
+那ports指的是eap output嘛
+所以就是ab跟clk跟sum
+好那
+接下來是我們希望有
+就是有u的所有的cells
+那就會是u1跟u2
+這個就是我們偽二的cells
+那希望找到所有的nets ending with clk
+那就只有clk一個是ending with clk的
+那希望找到其中裡面所有的qpins
+那就只有u2有qpins
+然後接下來是希望找到全部的references
+那所有的references就是ether和dff這兩個
+ok好那
+我們介紹完了就是RTL方面所要注意的東西
+然後還介紹了就是design compiler裡面
+包含介面那包含名詞解釋
+那包含語法
+所以這些是基本背景
+那接下來就會進入就是
+合成synthesys的流程了
+合成synthesys的流程了
+是好現在這邊
+是請說
+好那跟同學提醒一下
+我們這門課是有一個期中考
+那之前可能有跟同學提過說
+我們題目的型態
+基本上是同學只要有
+自己做作業啊
+然後有
+這個這些code應該都沒什麼太大的問題
+那關於前面提到的
+這一些script呢
+我們不要求同學要背起來
+我覺得這有點太過分了
+但是你要看得懂
+所以你的script呢
+也不要就只是拿來用
+然後好像跑出來結果就
+覺得可以交作業了
+你每一行都確定你知道他在寫什麼
+那有一些我們在講義裡面一些小的練習
+也希望同學務必要了解
+能夠自己作答是可以
+搞清楚他的原理的
+就是類似這樣的一些小題目
+我們可能會有一些變形之後出現在期中考
+那至於vlog那邊的話呢
+主要會著重在呢
+就是
+給同學一些電路圖
+希望同學可以把它轉成vlog
+或者是vlog呢
+你可以把它換成電路圖
+那前面有一個
+範例呢就是你不可以寫出有那一種
+有feedback loop的
+雖然你知道那個東西什麼拉回來之後
+就是做了一家
+但是你如果沒有切
+加個register把它擋住的話
+的這一種都會扣分
+事實上你也不能夠
+在先vlog扣的時候就照著這種設計下去寫
+所以這些都是請同學特別注意一下的地方
+那事實上你要繼續
+好
+謝謝
+那這邊
+嗯好那我就繼續
+ok 那
+我們就
+接下來我們就針對新的design flow來進行介紹
+那這邊
+我們就
+recall一下剛才已經介紹過的事情
+有rtl
+然後
+然後這邊有specify library的時候要給一些資訊
+然後還有一些關於面積功耗的條件會在setting
+design的environment跟concern這邊進行
+好那所有流程的第一步是rtl
+那這邊就不詳細說明了
+好那接下來是specify library的部分
+那這邊我們會分成兩個部分來跟各位介紹
+那第一個是為了跟各位介紹library的檔案
+那例如說technology library
+就是
+technology library 那example file 例如說fetch.tpl.tpl.db
+那這些library裡面主要提供了我們什麼樣的資訊
+那為什麼它可以幫助我們做合成
+那還有designware library 那
+for example 就是
+designware foundation.sldb
+這個檔案
+那裡面提供了什麼資訊來幫我們合成
+所以先
+先講解
+這邊會先講解
+檔案部分
+那接下來第二部分會講在design compiler裡面呢
+有一些關於library的參數
+所以這部分是design compiler裡面的
+所以我們要把哪些檔案
+給放進這些設定用的參數裡面
+所以用set這個指定
+那通常是在
+.technology.gc.setup這個檔案裡面
+因為它是automated source的
+在launch的時候自動source的
+會在這裡面去設定這些library
+好 那第二部分呢是
+我們會從design compiler裡面把RGL的file給打開
+那在這部同時會進行presso compilation
+也就是HDL compilation
+也就是前面講的translate這個步驟
+所以readRGL本身這部就會幫我們轉出GTAC了
+那方法會有
+指定方面會有兩種
+那後面會跟大家解釋
+好 那RTL準備好了
+那library準備好了
+那接下來就要為compile設置各式各樣的參數
+那參數大致上依照性質可以區分
+就是一部分是環境參數
+那在這一部分呢
+先給大家的印象是
+這邊的參數是和delay很高度相關的
+那包含operating condition是
+我們是在fast condition還是slow condition
+我們要用快速的參數
+我們要用快的還是慢的
+timing來做分析
+然後接下來wire load model是跟
+是跟其中的net跟其中wires的delay計算有關的model
+然後drive跟load呢
+是在input output本身跟rcdelay有關的參數
+那最後input output delay呢
+則是關於input output本身delay的一個
+就算constant的值
+所以這些這些environment基本上就
+describe我們為了要計算這個電路的
+rcdelay所需要具備的一些參數
+那實際上它也是跟我們
+要operating的環境
+那我們要接io的
+io的外部環境是高度相關的
+好那在design constraint這部分
+大致上依照性質分成四個小part
+那第一個部分是design rule constraint
+那這邊就不細講
+那等到下禮拜之後的課程跟大家解釋
+好那第二個部分呢
+是很重要是關於clock的各種constraints
+那剛才提過在clock在
+合成的時候是一個非常非常重要的訊號
+那先給大家有個印象
+就是它跟timing的運算非常相關
+所以我們需要一些指定
+來去特別處理clock這個訊號
+那細節結尾之後再跟大家介紹
+那constraints第三部分是一些特殊鍵路
+那前面在提到rtio的時候
+也有稍微講到一點
+例如說像是clock gating
+或者是force path之類的做法
+那細節之後
+那接下來呢
+最後一個部分呢
+則是和area或者是power之類
+和我們design goal比較
+就是design的目標比較有關的參數
+那剛才已經講過就是
+timing跟area是有trade-off這件事情的
+那所以這邊
+所以這邊在不同的trade-off下
+會合成出不一樣的netics
+那這邊就會介紹一些
+就是跟optionization比較相關的指定
+好那這邊我們就集齊了
+那個inputrtl
+然後還有我們的cell library
+然後還有我們
+我們各種設定design environment
+design constraints
+那後面就要
+真的進行合成
+也就是我們剛才說
+我們剛才說的optionization
+那就會介紹合成的指定
+和合成的一些相關的觀念
+那順利合成完之後呢
+就可以report出gay-level netlist
+那它的例如說面積啊
+或者是它的速度啊之類
+就是timing之類的資訊
+那後面我們就會再把gay-level netlist
+就是需要的檔案給output出來
+那就這邊就會
+看出report
+report我們應該要
+看些什麼用哪些指定
+那output
+要output出哪些檔案
+那裡面有分別有什麼
+那大概
+大概整個flow就結束了
+好
+那
+那我這邊
+先把technology library和designware library
+兩個小部分講完之後
+下課就是下課休息一下
+好
+我們目前大概把合成的flow
+給看過一遍了
+那基本上
+今天的課程會講到design environment結束
+就是包含setup library
+redesign跟set design environment
+那我就先講解technology library裡面有什麼
+designware library裡面有什麼
+好
+那就
+就跟各位介紹一下technology library
+裡面所包含的訊息
+technology library那顧名思義是
+在這個製程條件底下的各種
+就是各種資訊
+例如說-13奈米的technology library file
+就是跟這個製程
+那通常就是一組的technology library
+裡面會有例如說fast的
+或者是TV口或者是slow
+之類的這些
+一些不同的檔案
+那名字可能不一樣
+但是總之會有一套
+那這樣子的一套檔案呢
+會描述在同一個製程底下
+那不同的
+例如說操作環境啊
+那例如說電壓
+那例如說溫度啊
+底下的訊息
+那後面會提到operating condition
+那之後會提到
+底下的訊息
+那後面會提到operating condition的細節
+這邊各位就先知道比較重要的是
+這些檔案是同一組
+描述同一個製程在不同condition
+就是不同condition底下
+快的啦或慢的啦的條件
+那在其中任何一個檔案裡面呢
+就是會有相對應的訊息
+其中比較重要的例如這邊
+第一個就是operating conditions
+那會有
+那會有normalize過後的process voltage跟temperature
+那所以不同的
+就是這三個檔案之間的operating conditions
+可以互相對照讓它可以做運算
+那第二個是wire load model
+那wire load model就是幫我們去計算
+wire delay所需要用的
+那因為這個資訊也是在製程很相關的
+所以製程這邊會提供
+那第三個最重要的
+框起來的是standard cell的descriptions
+那就是
+也就是我們的end gate
+那not gate, or gate
+end gate還有free file之類的這些gate
+它們很細節的資訊
+那包含了例如說它的功能是什麼
+那它的pin角有什麼
+那它的timing是多快
+就是例如說
+從0到1 transition多快
+從1到0 transition多快
+然後還有area
+也就是它佔的面積還有它的power之類的
+所以會有這些cell
+非常detail的descriptions
+那具體來說
+我這邊就舉一個
+舉一個slot
+slot library裡面的cell內容
+例如說所有的input output pin
+還有這個cell的功能
+一些功能
+還有它的面積功耗都會記錄下來
+那這裡就是其中一個cell
+那其中一小小部分的
+數據
+那整個library
+整個technology library的檔案裡面
+會有很多很多個這樣子的cell
+那我們稍微recall一下我們
+更前面所提到的optionization
+這個步驟
+這個步驟是我們design compiler
+要去拼出一組gate level的電路
+然後再去檢查
+檢查這個gate level電路
+在timing方面的表現
+area方面的表現
+那這個gate level其中
+那
+gate level裡面所用的每個gate
+就會是從technology library裡面
+出來的
+所以它把這些cell換成別的cell
+組合再次檢查
+再次更換成一些cell然後檢查
+這樣子一直疊帶去optimize
+這整個optionization的過程就是
+based on這裡面的cell
+就是technology library裡面的cell
+和這裡面所提供的資訊
+所以就是大家
+就知道說standard cell library
+是和optionization這個步驟很相關的
+好
+那這一頁的內容是
+在本課程裡面應該不會用到
+不過當作一個簡單的補充
+那是講說就是
+.lib檔和.db檔的不同
+那.lib檔
+裡面會記錄關於cell的各種
+資訊那這裡的資訊大致上
+還是人類就是我們人稍微
+能夠看得懂的
+那我們使用library compiler
+lc shell這個工具可以把它轉成
+一個.db檔
+.db檔就是一個二進位格式
+那就是一個只有design compiler才能夠
+讀得懂的二進位格式
+所以這稍微解釋了為什麼我
+前面這裡是
+寫.db
+design compiler source是.db
+但是我在這邊舉例的時候是用
+.lib檔因為他們其實
+對應到的是同一個檔案
+所以就簡單
+簡單跟各位補充一下
+好
+剛才介紹完的library file的
+第一部分是technology library
+library file第二部分
+是designware library
+在technology library裡面是
+and or free file之類非常低層的cell
+但是在designware library
+裡面則是有加法器
+減法器成法器
+還有一些比較器之類的
+他們的實作方法
+designware library它反過來是
+technology independent的
+和製程是獨立的
+同一個designware library用在
+.13製程的合成
+.18製程的合成不同製程
+都是可以使用同一個designware library
+來輔助我們的
+design compiler的
+designware的
+介法這邊主要介紹兩種
+第一個是比較重要的第二個
+算是補充
+第一個是
+在預設上
+就是by default
+weblog裡面寫的加減乘除
+還有大與小於
+這些operator
+都是使用designware library裡面
+的module來實現的
+第二個則是補充說
+裡面有一些building block
+可以參考來使用
+就是
+我們用一個加法器來舉例
+例如我在weblog裡面
+寫了一個加法
+在我們的designware
+的library裡面
+就提供了
+我們兩種不同的
+加法
+reboot carrier adder是一個比較小的
+面積比較小的加法器
+第二個是carrier
+head adder這是一個比較
+快的加法器但它的面積比較大
+這邊designware
+提供了兩種不同的implementations
+我們在
+compile做
+configuration的時候
+依據我們下的constraint
+design的go不一樣
+我們的合成
+合成器
+就會選擇
+library裡面不一樣的implementation
+來放到
+去map到
+design裡面
+然後在這個基礎上
+去進行優化
+這邊的好處
+就是我們已經有
+針對其中
+任何一種operator我們都已經有一兩種
+還不錯的
+還不錯的implementation可以去使用了
+所以
+合成器就可以直接拿來用
+在一個相對來說不錯的起跑點
+再開始進行下一步優化
+第二個用法
+就幫各位去補充一下
+主要是補充一下而已
+designware
+library裡面有很多已經建好的puting block
+那在231工作站
+的這個path
+可以找到相關的訊息
+或者是在其他
+網站上會有
+最新的
+一些列表
+這些包含輔點數運算
+dsp或者是encoding之類的
+種類很多
+這邊有個列表一部分
+簡單舉個例子
+如果要使用輔點數的懲罰
+可以去找到它的menu
+裡面有它的document
+有各種功能介紹
+還有它要怎麼設定
+如果要使用的話可以從這個網站
+或者是這個
+這個網址或者是這個path裡面
+去找到這個flow懲罰器
+在veryloc裡面要怎麼去呼叫它
+如果我們使用了designware的building block
+那我們要
+我們在做模擬的時候
+前面的RTL
+simulation的時候
+要把其中一個
+veryloc的model去納進來
+可以使用類似這樣子
+我標成紅色的指令
+所以這樣子就可以
+designware裡面有很多building block
+可以給各位使用
+不過這部分算是額外補充
+各位同學在課程內
+就不一定會去使用到
+那我們去
+我看一下
+我在哪邊去
+我把這一頁講完之後
+就休息十分鐘好了
+我們這邊介紹完了
+technology library還有
+designware library
+我們就可以來介紹在合成的flow裡面
+分別在什麼步驟會用到
+這些library
+我們知道第一步是HTL compiler
+做translator
+可以叫translator
+跟HTL compilation
+translator compilation指的是同一件事情
+第二步是design compiler去幫我們
+把GTAG轉給level netlist
+designware library在
+兩個步驟裡面都會用到
+在前面轉GTAG的時候
+它可以告訴我們
+我們有加減乘除這些
+reference可以去使用
+在design compiler
+後面轉給level netlist
+則是它有好多種不同的implementation
+可以讓我們去挑
+讓我們去optimize
+technology library
+主要是在
+第二步裡面所使用的
+如同剛才提到整個optimization
+的過程是要花
+比較大的effort一直去疊帶
+去試
+去try不一樣的
+cell的組合
+或者是cell的size
+這些就需要technology裡面的cell
+所有的列表
+cell裡面各自的資訊
+所以這邊就是整個合成的flow所
+會去用到的
+libraries
+大概在這邊
+請各位休息十分鐘左右
+我們再回來
+如果有什麼問題的話
+也可以像之前一樣發問
+就休息十分鐘
+謝謝

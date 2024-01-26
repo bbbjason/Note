@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "idea/情報的冗餘.md",
+                "file": "Verbatim/inflation.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "idea/情報的冗餘.md",
+                "file": "Verbatim/inflation.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "idea/情報的冗餘.md",
+                "file": "Verbatim/inflation.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "idea/情報的冗餘.md"
+                "file": "Verbatim/inflation.md"
               }
             }
           },
@@ -158,17 +158,17 @@
       "bmo-chatbot:BMO Chatbot": false
     }
   },
-  "active": "96c4bfa10f9df915",
+  "active": "b63a73e9abb8948f",
   "lastOpenFiles": [
+    "idea/如何學習.md",
+    "idea/通貨膨脹.md",
     "idea/情報的冗餘.md",
     "idea/科技指標.md",
     "idea/How to distinguish between a tech bubble and a tech paradigm shift.md",
     "idea/Adverse Selection.md",
     "通貨膨脹.md",
-    "idea/通貨膨脹.md",
     "idea/The Feynman Technique.md",
     "idea/The Feynman Technique 1.md",
-    "如何學習.md",
     "idea/網路效應.md",
     "idea/對工作沒有熱情怎麼辦.md",
     "idea/建造那些錢買不到的事物.md",
@@ -187,7 +187,6 @@
     "idea/翻譯prompt.md",
     "Untitled",
     "idea/如何做出選擇.md",
-    "idea/科技體.md",
     "Diary",
     "Excalidraw"
   ]
