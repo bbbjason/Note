@@ -1,0 +1,225 @@
+下課時間好像沒有同學發問,不過考量到有可能有同學以前沒有接觸過這麼多design flow,所以任何不清楚的都可以問。
+例如包含compile的兩個階段分別做什麼,可能designware library、technology library分別做什麼。
+比較重要的應該是這兩部分。
+Tico的寫法、RTL寫法、Hand-to-hand object這種算是比較細節一點,回去再看講義應該也還好。
+所以如果有問題的話都可以繼續問。
+好,那我就繼續來介紹看一下。
+這邊我們介紹完designware library裡面裝的是什麼東西、technology裡面裝的是什麼東西。
+在合成的時候designware library幫助我們有好幾種加減乘除還有shift、比較器、等於器這些東西。
+它可以幫助我們合成gait level analysis的時候有一個好的出發點,有幾種不同的可以選。
+technology library就是很細節的提供了每一個gait的訊息。
+在這邊optimize的時候就要based上這邊有哪些cell可以用。
+它們分別的訊息是什麼,在這邊就會一直去優化我們合成出來的這個gait的組合。
+所以主要這兩個library做這樣子的用處的。
+既然介紹了這些library,下一步就是我們在題材compile裡面要怎麼樣去設定這些library的用法。
+如同剛才提到的說就是在.synapsis.tc這個檔案裡面,因為它是在tc launch的時候會自動source。
+所以我們一般來說會在這個檔案裡面去設定一些最基本的參數。
+另外提醒的就是各位要記得在你要開啟dc的這個地方去放置好這個一系號的檔案。
+以下這些參數就會在.synapsis.tc setup裡面來做設定,包含search pass,link library,target library,symbol library,synthetic library。
+接下來就一一做介紹。
+那這邊最重要最重要的其實是link library跟target library這兩個東西分別是什麼,那其他就反而是帶過就好了。
+我們就先講target library這個東西是最重要而且最直觀的。
+target library就是在compile的那個時候會所需要去用的。
+所以就是這些target library,這些technology library的file要設置給它。
+所以在我們進行authentication,在我們拼出gate level netlist並且就是一步一步的去進行優化的時候,用的就是target library裡面所涵蓋的這些gates。
+所以target library和authentication也是相關的。
+然後再講link library,那這個link library基本上包含了大部分就是你整個flow裡面算是大部分會用到的一些db檔這樣子。
+那它包含的步驟就很多,那包含你在translate也就是pressual compilation的時候會需要用到的db檔。
+然後也包含你接下來在進行wire load model的時候要用到的db檔,那設置operating condition的時候要用到的。
+那這些步驟,前面的這些步驟都是link library裡面要去用的。
+那所以這邊就要把designware library給涵蓋進去。
+那如果今天你用了其他的macro,那例如說你用了sdram之類的,也必須要加進link library裡面。
+那要不然你pressual compilation,你轉gtag的時候它找不到這個sdram本身是什麼東西就會失敗。
+不過這些tyconology library也要放進去,因為這些operating condition和wire load model也都會從link library裡面拿。
+所以用這個流程爐來簡單講一下就是前面的redesign,set design environment,set design contract這些會用到link library。
+compile design這個步驟會用到target library。
+所以這兩個是各位最需要知道的library。
+那search path則是就要把你所有所需要用到的一些地址給放進去。
+那例如說我下面在這邊設target library的時候tp9.tp、slot.tp、fast.tp,我寫的不是絕對位置,它是相對的。
+也就是它寫的是相對位置。
+所以它就會從這邊的search path裡面逐個找有沒有我要的這個東西。
+所以search path就是一旦有我目前還沒有的東西我去哪邊找這樣子。
+那symbol library和synthetic library基本上通常設定不太會去,不太會需要特別設定什麼。
+那就依照之前我們所知道的去設定一個generate.sdb還有synthetic要把designware foundation給設上去。
+那它們兩個實際上的用途呢symbol library是你在使用design vision的圖形介面裡面來跑的時候,
+你用圖形介面的時候這個東西可以給你這個圖形化介面的樣子。
+那例如說我們知道一般來說inverter是三角形加圓圈。
+那那個empty gate是一個一端是圓的矩形。
+那這個圖形是怎麼來的就是從symbol library裡面提出這個東西的symbol。
+那synthetic library我們就會放designware library,那就這樣。
+OK,那接下來我就繼續介紹合成的designflow。
+那specify完library之後呢,我們就會去把design給read進來。
+read進來的時候就會同時檢查它是不是可合成的,就是它語法有沒有什麼問題啊。
+那接下來那個,然後也會在read file這一步也會進行press load compilation,也就是轉GTAC這個步驟。
+那這邊額外講一下,那在如果我們使用圖形介面的話,那有些指定就會比較簡單,可以用圖形化介面完成。
+那在後面的範圍內,如果我使用了這個,使用一個一個字然後是斜線相連的話,這表示是圖形化介面裡面要怎麼樣去點選它的功能。
+那用框框框起來的就是在command line裡面要怎麼樣去打那個指定。
+所以後面會涵蓋涵蓋圖形介面跟涵蓋指定的東西。
+OK,那在我們把檔案讀進來,我們把design框框打開,然後把檔案讀進來,那它可以讀蠻多種東西的。
+可以讀very log,那也可以讀生成very log,或者是vhtl。
+那還有一些其他的格式也都是可以讀取的,甚至連.db檔.dc檔這種,就是其他自己internal的方面也可以讀進來,但是不一定是讀,就是不一定是只有讀rcl。
+那在其中關於讀rcl的這個部分的指定有analyze加elaborate或者是read file這兩種選項,我們就一一幫各位介紹。
+那在analyze加elaborate這個方法裡面,其中analyze這個步驟,analyze這個步驟會去確認你的檔案是不是可合成的,確認你現在有沒有問題,或者如果它不知道的話就會report一些error出來。
+那它會產生一些中繼檔案,就是.sync,.mr,.pbl之類的file,那這些檔案在elaborate的時候會用到。
+那elaborate就會把analyze挖的這些東西去elaborate成那個,去elaborate成gtag,我們講過是technology independent的這個格式,gtag,中繼格式。
+然後它也會把parameters給load的進你的vlog file裡面,至於load parameter這個等一下會有一個實際的範例去介紹。
+那它也會去resolve你design裡面所有的references,那在我們剛才介紹design objects的時候,我們提到了一個top module,直接跳回去好了。
+在這邊,在一個top module裡面,例如說這個範例有adder這個references,那這裡有dff這個references。
+那在elaborate這個步驟呢,就會把top,adder跟dff這些東西全部都串起來,就是把它去soft掉這個top裡面所有的references,這個步驟稱作soft references。
+如果在這個步驟裡面,它出現了,例如說module什麼,就是module top有一個onsoft references,這樣子的error訊息,那就通常表示要嘛是link library設錯了,要嘛是你的analyze的方式不對,或者是file有缺少之類的,這個時候就要停下來來做檢查。
+好,那在實際上面所使用的指令是這樣子的,analyze-format very log,然後接下來是它的argument list,然後analyze完之後,用針對你要的這個module,例如說top裡面寫了一個module叫做top,來做elaborate,就以它為主要的design來去soft所有的references。
+好,那readfile是一個更萬能一點的功能,它不只可以讀RTL,它還可以,你已經合成完了,你可以讀gay-level-netlist,或者是你已經合成完,然後output出一些相關的檔案,這個是合成完的一種description,DDC,也可以讀。
+那今天就是前面講過的fast.db,slow.db,這些library的檔案,也可以直接透過readfile來讀進來,那針對其中的RTLdesign這個步驟,如果使用readfile的話,它所執行的東西跟analyze-cali-library兌換是差不多的,是類似的,雖然不完全一樣,但是它不會像analyze一樣,就是去生出很多很多的intermediate的檔案。
+那而且針對有參數的design這個等一下會舉例,它也是沒有辦法去使用的。
+那這邊如果使用readfile format-varylog,然後這個hyper RTL是不一定必要的,我可以加,然後接下來就是你所要的list,那readfile的另一個,如果你前面的這個可以合併成readvarylog這樣的指令,所以也是另一種寫法這樣。
+那在讀其他的東西,例如說我今天已經寫好了一個gaylevel的netlist file,那我就可以用format-varylog-netlist,RTL和netlist是二選一的一個option,那它就會把gaylevel的東西read進來,那如果是你用圖形界面開的話,就可以直接看你合好的gaylevel長什麼樣子,然後這是其他用法。
+那這邊進一步解釋一下前面所說的parameterize的design這個東西是什麼。
+那像是在這邊,我在topdesign裡面寫了一個feeflop,那這個feeflop的參數是8,然後參數是depth8,然後length8,那我寫了第二個,一樣是feeful這個東西,但是它的參數是4,參數是depth4,length2,所以這兩個東西所對應,就是雖然都是feeful,但是它採用了一些parameterize,所以它的硬體架構,所以它的硬體架構,
+那右邊這樣子的,右邊是這個feeful的samajo,那例如說這邊寫了一個parameterize,depth8,然後length8,這樣子的一個寫法可以讓我們有彈性的去運用這個feeful,它不是只有一個可好的register長度,可能register數量,透過這個方式可以寫。
+但是這樣子的parameterizedesign算方便,但是它只能夠使用analyze加evaluate來進行讀取,用read very log的時候,它只會讀default,只會讀預設的parameter,它沒有辦法去solvedepth4,depthlength2的這個reference,所以用read file的時候就必須用analyze加evaluate。
+不是用parameterize,說錯了,用parameterizedesign就必須用analyze加evaluate,要不然這個人會讀不出來。
+那在read file或者是evaluate的過程中,它會去呼叫htlcompiler,或者別名叫prestored log,它就會去執行prestored compilation,也就是我們所說translate之類的這個步驟。
+這個時候會使用我們的link library裡面的東西,例如說你需要一些sdream的檔案,你有designware library的檔案之類的,會用link library裡面的東西,還有gtag library裡面的東西來去solve出來。
+這個gtag格式中剛才講的就是加減乘除,然後大於小於這些operator都不會unfold到幾層的level。
+那大家知道prestored這個詞在義大利文裡面就是很快的意思,所以其實這個步驟還蠻快的,比起後面的optionization。
+好,那既然prestored compilation過了就表示它大概知道你的硬體架構是長什麼樣子的,然後也會知道你這個design要用多少的fifup,那多少的max之類的,大致上會都會知道。
+所以在這一步我們要特別去檢查它有沒有latch這個東西,那就是如果出現了latch的話,就表示一般來說是你的if else或者是你的case statements沒有寫滿,通常這樣會產生latch,所以你就要針對這個訊號回去檢查有沒有latch。
+那latch在我們perform static time analysis這個步驟,也就是我們算這個電路的跑的速度是多快的時候會有一些問題,所以我們不希望latch的產生,所以要把RTL code修改到都是fifup沒有latch,除非你自己有特殊需求,不然一般是沒有latch的,才是design的狀況。
+那接下來我們要去set current design,就是在我們去read file read進來之後,我們會有其中一個檔案被指定為top design,去指定為current design,也就是目前為主的design,像這樣子。
+那但是你read完之後,它不一定就是你所想要的那一個,所以我們就會加這兩行指定,所以我們set current design為top之後,我們才會獲得我們正確想要的current design,就是一個簡單的輔助性的步驟。
+OK,那如果我們自己是在GUI介面裡面做的話,那大概讀完之後會是這樣子,那就可以做使用。
+OK,那接下來是set environment的這個部分。
+那在前面跑過整個flow的時候也講過,不過這邊再回顧一次,是第一部分是這個design environment的參數,那這部分參數可以想像是跟RC delay的運算之類的,很相關的,那包含operating conditions是fast還是slow,這會影響你要用哪一個library裡面的檔案來算。
+Wire load model是關於wire的delay,然後drive跟load,還有input output delay之類的。
+那這邊就再進一步介紹一下,就是為什麼要去設定環境參數的,還有一些關於那個環境參數本身的細節。
+那在design compiler裡面,它本來的預設設定看我們所要去用的那個電路環境通常差異蠻大的。
+那通常會預設說我們這個電路的input跟output,design compiler的預設input output都是理想的,那input不需要任何delay就可以把邏輯從1拉到0或0拉到1。
+那output也預設沒有任何電容,那delay也是就是比較短。
+所以我們需要依照我們要操作的那個實際狀況去引入關於這些input跟output的delay的參數,RC delay calculation的參數。
+那再來我們必須要去引入就是process,voltage,temperature三個部分的variation。
+那我們通稱PVT variation,那在做這種cell-based design的時候,這概念算是就是希望各位了解一下。
+那首先是process第一個,那因為我們的就是我們合成完之後的design之後可能會去下線之類的,那就是就做下線。
+那這個製程本來就不會是完美的,所以我們每顆出來的,每顆做出來的cell,每顆做出來的wire本來就會有一些些誤差。
+所以導致我們要考慮delay,那可能rise transition time,fall transition time都是有一個範圍的,它不會是一個定值,所以就要考慮process variation。
+那第二個是voltage,那我們的電路呢,今天在接例如說0.8伏特,或者是接1.2伏特,或者是更高1.5伏特之類的。
+它接的電源是不一樣的,那這個時候就可以想到它的速度一定也會不一樣。
+那電壓比較高的時候,可以想像邏輯的delay應該會比較快,那如果今天是,那如果是電壓比較低的時候,那個電路邏輯就會比較慢一點。
+做一個temperature,那我們IC操作在不同的溫度是,不同溫度的時候,它的速度,它的也會不一樣。
+那例如說在高溫,可以想像過熱的情形,那個電路就會變慢,那低溫的時候就會比較快。
+所以我們就recall一下我們前面講的technology library,裡面有slow.db,有fast.db,有typical.db之類的,描述不同操作環境的檔案。
+那這些描述不同操作環境,指的就是在PVT的環境,PVT的條件不同的狀態下,所有的Y,還有我們所有邏輯家,可能最快的扛低權是什麼?
+那最慢的扛低權是什麼?還有正常的扛低權是什麼?他們其中的delay數據。
+所以就這部分算是還算蠻重要的,就希望各位了解operating condition,例如說PVT,他們各自對delay有什麼樣的影響,還有我們為什麼要設定它這樣。
+好,那介紹完概念,那在我們的指定部分需要設定的參數有,根據約介紹六個。
+第一個就是我們提供好了不同operating condition的slow.db,fast.db,那這個指定會幫助我們去設定要使用的這個library是什麼。
+那wire load model是關於整個設計裡面,設計裡面提供了關於gate的delay,但是關於wire的delay也會有一個估算的方法。
+那還有就是關於driving cell跟load,那這個就是我們的input的部分,需要計算rcdelay的話所需要的一個r值。
+那setload的話是我們去計算outputdelay的時候需要的一個capacity c值。
+然後inputdelay跟outputdelay呢,是我們在算input的時候和output的時候需要去加上的constant常數值。
+所以這邊就是這樣子,所以在我們的design,我們可以想像我們的design前面會有一個input,後面會有一個output。
+所以我們提供的資訊就是,這個design裡面的,裡面所有的東西要在什麼operating condition下面去算它的delay。
+那其中wire部分又要是用什麼樣的model去算,design裡面的wiredelay。
+在input跟我的design相關的部分,我就要知道input的driving strength有多強,那就是可以在什麼時間內把我的input給拉起來。
+然後還有我的input是delay的,相對於gate的delay的多久,來arrive我的inputport。
+這個就是inputdelay,arrival time。
+那output就是,我要知道我output所要去drive的那個人,那個capacity值是多大的。
+然後我output必須要在什麼時候,在哪一個數值之前算完,在哪一個時間之前算完。
+所以有一個outputdelay的constant的差異。
+好,那所以這邊第一步就是我們這邊的六個指定,第一個是set operating condition。
+那這邊的pvt variation剛才已經跟各位同學解釋過,那而且也提過說我們已用的slow.db,fast.db之類的。
+這些檔案會在這個步驟裡面去設定。
+那這邊下面這個指定就可以幫助我們設定operating conditions。
+那會有一個是max部分,那一個是min的部分。
+那因為我們希望我們需要去分析這個電路最快能夠跑多快,那在最糟糕最壞的狀況下會跑多慢。
+所以max跟min都是需要做相對應的設定。
+那其中當然slow的這個部分是會重要一些,因為因為如果電路跑太快的話相對比較好解決,就是只要塞一些buffer可能就可以了。
+但如果電路跑太慢的話會需要花比較大 effort去處理。
+所以在這個部分會是比slow會算是蠻重要的一點。
+那第二個部分是wireload model,wireload的模型。
+那這個一樣是在technology library裡面去提供的。
+那fast跟slow的檔案裡面大概就會有不一樣的wireload的參數。
+那wireload具體來說它是一個使用fanout去查找wirelens的一個表格,是一個估計用的model。
+它是估計用的,不是實際的wirelens就是這樣。
+那假設今天這個wire接到的fanout它接到的output pin很多,那我們就會估計說這個wire給它比較長的長度。
+所以這個wire就會有比較大的電容和比較大的delay。
+就是一條net的fanout就是除了這條net的driving pin之外其他所有pin的數目。
+所以wireload model就是依照fanout數量去查找線的resistance和線的capacity和線的area。
+那當然因為我既然說是查表,所以這個查表可能是有線的,那不一定能夠涵蓋所有fanout的值。
+所以有時候在wireload model裡面會提供一個估算用的參數。
+那合成器就會透過插紙之類的內插外插的算法,來得到某一個特定的fanout下面,這條線的長度和它的lens和resistance之類的。
+所以其中一個範例的指令是這樣子的。
+比如說使用slow的library,裡面這個名稱w10這個東西來當作wireload的model。
+那wireload model在兩頁後會簡單介紹。
+那這邊我們就列出了用wireload model去計算一個net的capacity、capacity、resistance、area的方法。
+那這邊在slow library的很前面的部分會給我們所有參數的單位是什麼。
+那在slow library中間的wireload這個部分呢,它就會給我們要算resistance的長數是多少,
+要算電容的長數就是這個倍率是多少,算area的倍率是多少。
+然後還有要算這個fanout跟lens的對照表的這個對照方法是什麼。
+那透過這邊這個數據,透過這邊這個單位我們就可以去算。
+例如說在fanout為3的狀況下,我們能夠算出lens就是fanout對lens的這個比率66.667乘以3。
+所以這個就會是線的長度。
+那線的長度在乘上關於capacity的長數,這個藍色的長數就會得到這一條wire相對應的估計,用wireload model估計出來的capacity值。
+那至於resistance還有area其實也差不多。
+我們已經估好了這個lens,那就乘上相對應的這個長數就可以得到我們的值。
+那wireload model前面的這個步驟我設定為top。
+wireload model它其實在design compiler裡面有top enclosed跟segmented三種不同的mode。
+那其實它就是依照,簡單來說就是依照那個,依照你要估算這條線它究竟是要估算的多細緻。
+那要不要在不同的區域使用不同的參數來去計算,依照它的細緻程度來處理一條wire。
+不過這邊就當作補充就好。
+那這邊有興趣的同學可以去參考一下,有三種不同mode。
+那講完了operating condition,還有講完了wireload model。
+那接下來要設定的就是關於input還有關於output他們之間的rc幾類的calculation。
+那這邊的,這邊就是有一個input drive的impedance,它大致上所要傳達的就是一個概念。
+那我們的input究竟會是多久之後才到呢?
+就是會隨著我們的給定的一個delay的常數,還有我們藉由rc constant,藉由rc constant所估算出來的一個值。
+然後來跟你的fanout有相關的會得到你總共的delay這樣子。
+所以今天隨著我們這一條net的output load越來越大,那我們的delay值會是這個constant再去加上rcdelay所算出來的估計值。
+所以我們在算這個chip,我們在算我們的電路的input跟output的時候所要使用的rc的參數是什麼呢?
+那通常就是指pad這個東西,那我們自己寫好的design會在中間這邊,那它的input跟output都會藉由pad的這個東西來跟我們去做溝通。
+所以我們在我們現在只要設計的時候,我們就是要參照pad這個東西,input pad,output pad它的resistance和capacity來設計我們的input driving還有output load。
+所以呢,在這邊,在這邊我們就會使用iopads的driving sense還有iopads的output load來決定我們的input drive和output load。
+所以這邊的指定有兩種,第一個就是set drive,然後直接指定有我要的電阻數值,apply在所有input上面。
+那這邊可以更具體一點的,我們從一個關於pad的library裡面拿出一個關於pad的cell,那這樣子我就可以順利知道這個pad它的input的resistance是多少。
+那就把這個driving cell設在我的input上面。
+那這個pinC指的是這個input pad要跟我們所相接的這個角位這樣子。
+所以set driving cell是更實際一點,直接使用正確的iopad來設定我們的driving sense。
+那setting output load則是我們output的這個pad呢,這個pad這個元件,它的capacity是多少。
+那capacity越大就表示我的RCE delay越慢,就是導致我drive它需要越大的effort。
+那所以就會使用set load這個指令來去設定它。
+那這邊比較重要的是,如果要這樣子設定的話,而不是直接簡單的指定一個值的話。
+我們必須要把跟input output pad有關的這些library的.db檔,給加進我們的link library和target library裡面。
+尤其是主要是link library,要不然我們在設定的時候,它這個過程會從link library裡面去找這些cell,不然它可能會找不到。
+那接下來在我們設置完input跟output這些load跟drive之後,我們可以使用report port這個指令來看我們目前所有的input output port是怎樣,還有它們的pinload是多少。
+OK,那接下來最後兩步是設定input delay跟output delay。
+那input delay是指呢?input delay是指從,就是我的input會延遲多久才進來,相對於clack而言會延遲多久才進來。
+所以例如說,在一個clack cycle裡面,我的input可能不會一開始就準備好,而是在中間開始delay了一小段時間之後,input的值才會順利ready。
+那這個值,這個delay值就是input delay。
+那設定input delay的方式呢,就是如下面這樣子。
+那個,例如說我挑好了一個叫做in1的這個port,然後設置它的max的delay值,還有它min的delay值。
+所以它最晚會比clack完6.4的ns來,然後最快會比它慢4.4的ns來。
+然後相對於clack而言,所以這個clack cycle是重要的。
+那也有比較方便的寫法,就是因為我知道我全部的input應該都是差不多spec,所以我就會除去clack我特別處理之外,我就全部都設定同樣的input delay。
+那這邊這個指定的用法remove on collision inputs,然後再pose clack。
+這個就是指我先取全部的inputs,然後把clack這個input給拿掉。
+那剩下全部的input都當作我argument的,都當作我這個指定的apply的對象,去apply這樣子的delay,input delay。
+好,那接下來則是關於output delay的部分,後一個是output delay。
+那output delay是,就是output delay就是我的這個訊號必須要比下一個clack還要提前多久去算完。
+如果我要提前的output delay很多的話,就表示我要很快很快就算完。
+那如果output delay很接近零的話,就表示我幾乎快到下一個clack的時候再算完就好了這樣子。
+那它的設定方法呢,就是set output delay,然後clack是clack。
+然後就是例如說我有一個port叫作一個in1的port,然後把它設定5.3的output delay,大概是這樣子。
+好,那這邊我們就結束了關於design environment的設定。
+那今天要講到的就是setting design environment這邊結束,所以今天課程差不多就到這邊。
+那各位同學如果有任何問題的話,也都可以發問。
+不管是關於library是幹嘛用的,那那個合成的步驟是什麼,那design environment啟動的細節什麼。
+那如果有問題的話可以詢問,那要不然就,好,請問PE,我看到有人問了。
+PE80的這個verbose是什麼意思。
+那其實不只是這個指定啦,蠻多linux上面的,就是linux上面能夠相容的一些指定都會有類似這種reversity的設定。
+那reversity通常就是把你所要output,你所要report出來的這些東西的更多細節給report出來。
+所以report port不用加這個flag,一樣會report出一些東西。
+report port加了這個reversity的flag就會report出更詳細的東西。
+所以通常reversity就是提供更多資訊這樣子的意思。
+這個verbose是GRE單字,我搭配一下。
+EDA tool裡面一大堆GRE單字,那些工程師念得太認真。
+那就看各位同學如果沒有什麼問題,那我問一下我們是不是再休息10分鐘。
+10分鐘之後,我們休息到4點20,然後我們會回來上level。

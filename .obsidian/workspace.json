@@ -4,19 +4,15 @@
     "type": "split",
     "children": [
       {
-        "id": "6b571a7d80c42694",
+        "id": "28268e86741afcff",
         "type": "tabs",
         "children": [
           {
-            "id": "b63a73e9abb8948f",
+            "id": "3db05733955574b8",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Verbatim/inflation.md",
-                "mode": "source",
-                "source": false
-              }
+              "type": "empty",
+              "state": {}
             }
           }
         ]
@@ -85,7 +81,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Verbatim/inflation.md",
+                "file": "idea/情報的冗餘.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +98,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Verbatim/inflation.md",
+                "file": "idea/情報的冗餘.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +121,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Verbatim/inflation.md"
+                "file": "idea/情報的冗餘.md"
               }
             }
           },
@@ -158,8 +154,9 @@
       "bmo-chatbot:BMO Chatbot": false
     }
   },
-  "active": "b63a73e9abb8948f",
+  "active": "96c4bfa10f9df915",
   "lastOpenFiles": [
+    "Verbatim/inflation.md",
     "idea/如何學習.md",
     "idea/通貨膨脹.md",
     "idea/情報的冗餘.md",
