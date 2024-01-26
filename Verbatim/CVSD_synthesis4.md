@@ -1,0 +1,1194 @@
+基本上是一样的 针对这种情境
+Design Compiler有下面这三种
+就是比较常用的处理方法
+首先是Compile once don't touch
+那我们刚刚提到了
+不同Summodule他们之间的逻辑
+可能就是完全一样的
+所以在这个方法里面
+我们就预先Compile好CE这个Summodule
+接下来我们要用C的时候
+直接去呼叫已经Compile好的GateableNetlist
+填在C的这个位置上
+然后不去优化它
+所以接下来第二次Compile只会Compile
+BD,A,Top这些外面其他的人
+这种做法基本上就参考一下
+大致上的指定做法
+是要先把CurrentDesign设定成C
+然后Compile一次
+然后把CurrentDesign设定回原本Topmodule
+然后用这个指定把C所产生的这些cell
+这些cell给设定成Don't Touch
+然后针对Topmodule再去Compile一次
+所以设定成Don't Touch之后C就不会被Compile
+那这个相对于后面两种办法的好处是
+它所花到的memory比较少
+因为这边我precompile了一次
+那Compile完我就不动它了
+所以就只需要耗费一次的memory
+而且它Compile起来也有可能会比较快
+但是它在time和area上面的表现
+通常就会比后面两种办法还差一点
+那接下来这个方法是uniqueify
+顾名思义uniqueify就是让它们变得unique
+所以每次呼叫C
+我们都当成它是unique的不同个体
+来做Compile
+所以这样子B就有C0、C1
+虽然它们的逻辑是一样的
+但是我就直接当作它们是不一样的人来Compile
+所以相对上因为两个人分开处理
+所以会耗费比较长的Compile time
+还有花比较多Compiling需要的memory
+不过U3或U4它们两个人
+它们input或output的逻辑可能有一些不太一样
+所以如果我们视为不同个体的话
+就会更有效、更弹性的去处理它们
+所以在time或者area之类的performance
+就有机会得到比较好的表现
+这是uniqueify
+在我们后面的example指定也是采用uniqueify
+第三个solve multiple的instance方法是ungroup
+ungroup和uniqueify有点类似
+但是就更加暴力一点
+这边就直接把C这个SAR module给拆掉了
+它的逻辑、它的方选就融合了
+进上层的B这个module里面
+所以刚才还有U3跟U4那个SAR module的壳
+就整个被拆掉了
+只剩下里面的逻辑
+它能够得到的结果
+GN3和uniqueify还算类似
+也是要比较长的时间
+跟比较多的Compiling需要的memory
+它的performance也会比compile once don't touch来得好一些
+但是在合成出来之后
+后面的nannies就完全找不到C这个SAR module
+如果你看一些timing或area的report
+之后你就可能会比较难
+一些对白出它的地方是在哪里
+我们介绍完了三种去solve multiple instance的方法
+接下来就正式进入Compile design了
+那这边就是我们在Compile的时候
+会把GTAC里面的这些逻辑这些方案
+然后会使用target library里面的cell
+就是target library里面会放technology library的档案
+那就包含了例如说entgate,orgate,notgate,vflop
+这些跟制程就是制程这边有关的cell
+来去拼凑出GTAC所表示的方式
+然后我们前面下了很多很多的constraints很多指定
+在这个mapping的过程之中就会接待很多次来进行优化
+刚才说的优化
+Compile的design compiler所进行的优化大致会有两种
+一种是logic level optimization逻辑层面的
+一个是gate level optimization
+也就是cell library gate层面的
+具体来说
+logic level optimization会做以下两件事情
+基本上是对function和logic做优化
+而不是用gate的那个角度去
+其中的一个方法是structuring
+structuring指的是针对逻辑中就是会用到的一些共同的subfunction
+就是共用的逻辑共用的一些term
+来做grouping跟sharing
+也就是我就算一个然后就再把它分给大家
+那这种sharing呢
+概念上比较类似用久一点的total体类去换小一点的面积
+因为两个本来要分开算的类似的东西把group在一起
+一起算
+后面又要再把它接给两个人
+就是用久一点的total体类去换小一点的面积
+然后另一个logic level的是flattening
+也就是会把一小部分的逻辑整个拆开成sum of product
+就是这种这个是一底层的那个boosting逻辑表达方式
+然后就把它break成就是break成只有两层的sum of product
+那这个就相反了
+它是用大一点的面积去换小一点的total体类
+就不会把它break得很薄
+但是面积相对会比较大
+所以这两种优化就是逻辑层面的优化
+基于gate level optimization
+gate层面的优化呢指的则是
+你从technology library里面拿出来sell
+来去组合成这个逻辑
+然后去check你的那个时间你的timing够不够快
+levelize在一个cycle内扣掉3-0那些
+在一个cycle内算完
+来得及算完的话面积有没有机会更低
+那gate level optimization就会去尝试不同种mapping的方式
+那就可能会更换不同的failout的类似
+就是功能一样的是不同的sell组合
+或者是如果有不同的hbt rbt library可以使用之类的
+或者是wire的接线方法之类的
+那这边有一个很重要的就是在前面讲
+design的application也讲过的是
+整个application是constraint driven的
+那每一条pass呢我们都是在违反constraint的状况下
+我们去修它
+那就是在符合了前面priority的constraint
+我们在针对后面的priority的constraint
+去尽量去做optimization
+那这个就不是穷举法
+而是在各种给进的条件下去做尝试跟去做优化
+所以这个是constraint driven的
+那我们前面的时候就提到过optimization
+optimization会用technology library的资料
+timing的资料来去算你的电路速度
+有没有符合你的要求
+具体来说就是关于timing的要求有两个
+一个是set up time的要求
+一个是hold time的要求
+这边因为等一下会提到set up time跟hold time
+所以我就快速带过一下
+等一下还会再有一些解说
+那我们想象在第一个passed edge这个register
+从A这个register出发
+我们经过了某些combination logic
+然后目标在下一个passed edge
+要抵达这边这个目的地好了
+B register这个目的地
+希望在抵达B register的这个passed edge
+前后的一段时间
+A预算完的资料都可以放在这边维持不变
+前是往前多长
+往前set up time这段时间这么长
+那就要事先把算好的logic给set up好
+然后还要往后hold住这么长一段时间
+往后hold time这么长一段时间
+资料都要hold住不能够被overwrite掉
+那针对B这个register的set up time
+hold time要求实际上就是对AB两个
+AB两个register这段逻辑的时间长度要求
+那所以对于所有register to register timing pass而言
+前一个clock来的data算这么久的时间
+最晚最晚必须在下一个clock减掉了set up time
+这个时间之前就先算完
+所以就是最慢不能够比这个还要晚
+那它会被overwrite掉是什么时候
+overwrite掉是第二个passed edge cycle从A出来的人
+它会把我要待在这里的东西给overwrite掉
+所以第二个要求是这一个clock来的data
+它抵达的时间不能够比hold time这段时间
+还要来得早不能够太晚了吧
+也就是不能够太早的把现有的资料overwrite掉
+所以大家现在就先有个概念
+timing requirements是建筑速度不能够太快
+也不能够太慢
+那不能够太慢是set up time
+不能够太快是hold time的要求
+就先有这样子的概念
+所以我们后面再解说关于修timing的指定的时候
+就可以知道
+那么还有一个design compiler
+它所支援的compile功能是retiming
+retiming它是default是不会开启的
+但是我们可以去开启这个功能
+那在开启retiming的时候
+我们允许design compiler
+可以去挪动我们自己user切的register的位置
+例如说在这里有一个2 stage的pipeline的状态下
+中间这个stage的pipeline切的太前面了
+后面的逻辑时间就是会花超过我们clock period
+那在启用retiming的状态下
+design compiler就可以去自动调整这个register的位置
+然后调整这个pipeline
+甚至于是有机会可以减少register的数量
+可能在切在这里做pipeline需要的register比较多
+往后挪一点有机会可能会比较少
+那retiming有可能达成的好处
+也不是完全一定
+而是有可能达成的好处是减少register的数量
+还有让你的pipeline更平衡
+那timing的area有机会变得更好
+但是这个也是不完全一定的
+也有可能开完retiming跟原本差不多之类的
+然后还有在design比较大的时候
+retiming可能就是会花很久的时间
+或者不一定会收敛这样子
+所以这个option就是给大家知道并且做参考要不要使用
+那前面就讲解完了
+compile的时候我们在做什么
+那包含了optionization是什么
+sheda time hold time的要求是快慢的要求
+还有retiming是什么东西
+那在指定的部分就有下面的这些
+那compile这个就是最基本的compile指定
+那compile可以指定mapping的effort
+如同这边所写的从低到高
+那在effort越高的时候
+design compiler会针对timing还有area
+做最大程度的优化
+会尝试的比较多次这样子
+那至于在load的时候
+它就不会对timing跟area要求的那么多
+如果真的不过
+多试几次不过就放弃了
+hide的话就会花更多时间去optimize
+因为hide是对timing跟area的要求最高的
+所以如果你的条件刚好设置的比较严格
+就是刚好你的timing非常的吃紧
+那在这种状况下
+用hide effort就会花可能蛮久的时间
+或者可能就很难收敛这样子
+所以就是有好处但是也是需要注意的
+那么compile ultra是一个蛮好用的指令
+就是除了它会自动的
+就帮你使用hide effort以外
+它还会自动帮你开启一些对optimization
+有帮助的一些选项
+像是auto ungroup或者是boundary optimization
+那当然它会自动开
+你也可以把它disable掉
+那auto ungroup就是刚才提过的那个ungroup
+就是把里面的hierarchy去打散掉
+就是把壳拆掉
+然后全部都融合进上面
+来整个融合在一起做optimization
+那也是可以disable掉的
+boundary optimization则是指的说
+在不同的module之间可以
+就是针对他们input output的界面来做一些优化
+而不是用他们的hierarchy去打散掉
+而不是用他们事件写好的module的boundary来
+就当作写实了
+可以在边界上面做优化
+所以compile最重要的compile指令
+和compile ultra指令
+那么compile还有一个常用的功能
+是incremental mapping
+incremental mapping简且可以写
+可以写inc这样子的一个option
+在使用这一个flag的时候
+就只会进行gate level optimization
+不会进行logi level optimization
+那就比较不会动到上层的逻辑
+只会用下面的cell尽量去拼出来
+那么incremental mapping其实也可以自己独一使用
+不过比较常用的用法可能是
+compile完一次之后
+再针对一些需要用到的选项
+来去开启某些optionization的flag
+然后接着使用incremental compiling
+来再次去做
+只有做gate level层面的optionization
+像是前面有提到说
+我们可以引进multiple VT的library
+来做leakage optimization
+那就可以在compile完之后
+我们把leakage optimization开起来
+再透过一次incremental mapping来做
+那retiming可以使用的一些指定有下面这些
+那例如说我们可以set optimized registers
+这个东西把它开起来
+那就再配合compile ultra的retime这个flag
+这两个合起来就可以自动帮你做retiming
+或者是我们在compile完一次之后
+可以透过optimized registers这个指令
+在你已经合成完的netlist的前提下
+来做retiming
+那么optimized registers这个指令
+它就包含了做一次retiming
+再加做一次incremental compilation
+所以它就会自动帮你去做
+那所以你也可以做的是optimized registers
+然后你指定它不要帮你做incremental compiling
+然后只有做retiming
+那你后面再接一个自己喜欢的incremental compiling
+之类的指定也可以
+那提一下retiming这东西
+在design compiler里面的做法会分两阶段
+它第一步会进行pipeline上面的优化
+它会尽量把你的pipeline切得比较平均一点
+那这个时候它就是先不care你的register数量
+而是先以平衡的pipeline为主要目标
+那在后面的阶段retiming的第二阶段
+它就会以比较locally的去减少register数量来当作目标
+所以就先处理design compiler做retiming
+会先处理pipeline的平衡
+再处理register的数量
+那如果需要知道更多关于compile的功能
+可以使用help或者是manual的功能
+那compile跟compile ultra里面的option都还蛮多的
+那大家就可以参考一下
+那刚才有提过有setup time跟hold time的要求
+那如果没有达到这个要求的话就是violation
+所以如果我们合成完之后
+有需要去修setup time跟hold time的violation
+就可以透过下面这些指令
+setup time violation可以透过incremental mapping的方式
+来去帮你修修看有没有办法修掉
+那至于hold time violation的部分呢
+为了要修hold time violation
+前面有讲过set fix hold
+这个指令是必须要对你的clock设的
+那针对你specify好的这个clock
+我要去修hold time
+这是这个设定的意义
+然后我们就可以在compile里面使用
+onlyhold time这个option
+那就会主要针对hold time来进行就是修饰
+就是来修
+那这边这些option有可能做的是
+就是想办法帮你换换看速度更快的cell
+如果你有multiple VT library
+就可以从HVT换成regular VT之类的
+或者是换可能面积不同
+那driving的能力更强或更弱的cell
+然后或者是将你的net换成一些不同的
+不同的处理方式之类的
+来处理你的net delay
+这些方式它就会自己帮你去修掉
+cell time and hold time violation
+就可以帮你修修看
+有时候呢我们合成完之后
+就是assign这个statement
+这个statement不一定会被合成出逻辑
+有时候就会还是合成出assign这样子的语法
+那这边可以使用set fixed multiple portnet这个指定
+来把assign的statement改成一个实际上有的buffer cell
+这边这个指定在合成用script里面会蛮常看到的
+所以就是要做buffer的时候
+就是通常会把这个指定给加进去
+好 接下来会设置naming rule的相关讯息
+那这边设定naming rule会保证说
+主要是保证说我们的gate level的netlist
+和我们timing的file就是一些相关的答案
+他们之中的cell跟外来的名称都会是相符的
+不然在后面的步骤里可能会出现一些问题
+那这边的指定还蛮detailed的
+那其实基本上也跟合成出来的netlist好坏没有那么大的关系
+只是就会必须要加进这一块
+所以大家就知道这一块主要是在修你的naming rule是怎么样的
+所以它这边就会allow了大小写的A到Z
+还有0到9还有底线
+然后net部分可以allow中瓜壶
+cell部分就没有allow
+所以它就会依照你设定好的naming rule
+来去更改你目前的名称
+那么 compile的部分就进行完了
+所以接下来就要去report出跟提散有关的内容
+并且把gate level netlist所需要的答案给write出来
+那这边的report跟write的指定相对比较单纯
+那重点就不是放在指定上面
+那比较希望各位了解的是report部分
+希望大家知道里面的东西要怎么看
+那里面有什么讯息帮助我们去修改rtl
+或者是修改合成用的script写法
+或者是有哪一些东西可以tune
+后半段的write就是希望大家知道
+write sdc,write sdf,write format,verylog
+这些写出来的档案分别代表了什么东西
+在什么样的状况下要去用它
+刚才有解释过大鱼的打法
+鱼法就是输出到这个档名的档案
+好,那首先我们会先介绍指定的部分
+这边就介绍report timing,report area,report power这三个部分
+那report timing的部分就会
+在delay max的话
+就会帮你秀出
+在你的design里面delay,total delay
+最长的那一条path是什么
+那如果是min的话就会显示出最短的那条path
+它的中间的讯息
+至于后面的max path的部分
+就是指定你总共要去秀出多少条path出来
+在这个指定里面它就会帮你秀出delay最大最大的
+总共五条,前五条delay最大的path
+那如果你设定更多一点设定任务
+十或者一百,你就可以获得更多条path的讯息
+area的部分呢,就会以unpin范围单位
+去秀出你design的area
+那这边这个hierarchy的flag
+hierarchy的option
+就会帮你去print出,就会帮你去显示出
+里面的所有的submodule
+他们分别的area是多少
+所以hierarchy这个还蛮好用的
+你可以知道
+就是它不是直接显示出
+它不是直接显示出
+还蛮好用的
+你可以知道你
+就是它不是只有total的area是多少
+而是可以告诉你每个submodule
+它分别占了多少的面积
+所以这个在了解你的design
+哪部分的combination比较多
+哪部分register比较多
+这种就是这种部分
+hierarchy是很有帮助的
+那power的部分就会report出
+dynamic power跟steady power
+dynamic power就是指transition的时候所产生的
+steady就是没有transition的时候的那些
+不过
+后面会提到一下
+用prime time来做power的分析会更准确
+design compiler通常只是比较粗略的估计
+好
+在timing report里面
+最重要的是我们要看slack
+slack这个值是不是负的
+那什么是slack等一下会
+就是后面会做个解释
+那如果说slack是负的
+就表示你的design在这条timing path上面
+有violation
+那这个就是不可以的
+就必须要去修改
+例如说cycle time要放久一点
+或者是你的design要修改一些部分去插pipeline
+之类的这种关于timing的修改
+那这边就如同刚才说
+可以知道这些design里面
+最长的那几条path在哪边
+是哪一条
+那通常这几条就是你的timing最赶不上
+会花比较大的面积来去
+换它timing的
+就是会花比较多的面积去合它的这些path
+那就可以当做
+你要不要在这边切pipeline
+要不要挪动一下logic之类的参考
+所以timing report可以指导这些
+虽然中间这些cell看起来好像都是
+只有cell name而已
+但是可以从前面这个iins的出发
+到后面这个all data reg结束
+我们可以知道这条path是哪里开始哪里结束的
+那些design我们应该就会知道它是哪一条
+我们再看一下这边
+就会有我们刚才提到的delay
+这边在rise edge来之后
+它的clock network delay基本上就是我们刚才有设的
+clock latency
+所以这边你就会有一个值
+然后这边还会再把你可以用掉的时间
+去那个
+减掉你的uncertainty
+这个uncertainty就预留了你之后
+在APR做clock处理可以用
+所以我能用的时间就减少了uncertainty这么多
+AVR report这边会告诉你
+combination block面积
+有多少
+sequential block面积有多少
+还有wire connection它的面积有多少
+那这边就分项来讲
+那这边的这个
+macros
+指的是你额外呼叫的IP
+例如说你有呼叫一些建好的sram
+或者是一些DSP的block
+那你是没有要去优化它你只是
+引用这个block在你的design里面的这种状况
+有用的话就可以知道这里的
+这里的东西是数量是多少
+下面的combination area就是
+逻辑部分
+还有这边的non-combination
+基本上就是sequential cell
+它主要所占的area有关的部分
+这里的macro bypass area就是刚才提到这个
+所以如果你用了一些sram
+你可以从这边知道你的sram在你的
+design里面总共占了多少的面积
+那还有这边
+这边有一个东西叫做net interconnect area
+那这边
+如果这个net interconnect area的值
+它写是undefined
+这边的total area也写undefined
+那么就表示你前面忘记
+设定wire load model或前面wire load model没有设定好
+所以它就没有办法帮你估wire的面积出来
+所以如果要修undefined
+area就要去设定
+在compile前设定wire load model
+但是就算你设定好了
+基本上这个interconnect area我们是不太会去看它的
+我们关注的主要是total cell area和其他向的部分
+那这个的原因呢
+是因为design compiler里面
+wire的处理 接线部分的处理是非常粗略的估计
+它只是用它接到的output
+有多少来去估它的长度
+就是等比例去估越多
+failout的长度越多的这样子的估计而已
+它并没有实际上以cell之间
+摆放位置的关系
+所以net area是很不准的
+但是cell是你实际上会用到的那些逻辑杂
+所以cell就比较有参考性
+所以在这个步骤我们会比较注重cell area
+而不太管interconnect area
+那这个部分的原因也希望各位了解
+power report则不是告诉你
+design
+大致上的power的消耗会是多少
+但是这个是蛮
+就是蛮没有那么准确的
+那如果需要获得更准确的估计的话
+可以输出到我们的gate level netlist
+之后去用ncvlog
+来做simulation
+既然是做simulation你就会有实际上
+你要喂给它的pattern 实际上它操作的环境
+在做simulation操作的时候会吃到的input data
+跟应该要有的output data
+所以中间的cell的wayform就会generate出来
+所以在以wayform的状况下我们使用prime time
+去估计它的power的消耗
+才会比较准
+那这边呢就再另外提一下
+就是我们的power有linkage power
+还有switching power之类的
+那就是你的net你的gate在switching的时候
+会用掉的那些
+就是register然后combination
+它在0101之间switch的时候会吃掉的power
+linkage则是你维持不动的时候
+例如说我的register一直维持在0的值
+但它还是会稍微漏一点电
+那gate也是就是会多少漏一点电
+那linkage power就是这个部分
+那如果说你register的节点有点小
+例如说40奈米28奈米
+就是更先进的制程
+linkage power的影响会越来越大
+所以就是会有这个现象这样子
+那下一步呢
+是safe design的部分
+我们会跟同学讲解的是sdc,sdf
+sdc和sdf的名字
+名字有点像
+但是就请大家务必要确实区分
+那delay format
+它里面包含的就是关于delay的
+sdc和sdf的名字
+所以我们可以把这些名字
+汇总起来变成一个你total所使用的
+constraints有哪些这样子的档案输出出来
+Gate level analysis就是你合成完之后
+它实际上用了哪些的gate
+每个gate它的名称它的接线是什么
+Gate level simulation重要的是
+需要sdf档这个东西
+还有-v档这个东西
+我们在gate level的时候必须要使用
+那所以sdc档就是
+我们会把所有在里面所用到的constraints
+给写出来
+包含timing的constraints,power的constraints
+跟area的constraints
+那这个东西它不一定会跟你前面
+我们在设定design environment设定design
+就是design的constraints的时候
+是完全相同的
+因为我们在设定design environment的时候
+是完全相同的
+因为有时候你的一个指令或者你在
+图形界面里面点的一个动作
+输进去的指令它在内部会转化成
+不止一条的指令来进行
+sdc档就是它真正所使用的那个
+detail的constraints
+detail的settings究竟有哪些
+那所以sdc档
+就是它的表示方法也都是用tico的表示方法
+因为我们前面在下constraints的时候
+也都是用tico的形式,所以它也是
+这样子去表示的
+设定的方法输出的方法就是write sdc
+给它一个名字,还有给它
+version的argument
+那在这边我们write sdc
+write出来的档案呢
+大致上会长这样子
+那这边我们就可以看得出来有一些是跟我们前面
+所设定的argument有关的
+那这边我们设定的operation condition
+wire load model、wire load mode
+还有max transition、max fanout
+还有max area之类的这些都会对应上去
+那我们之前所设定的
+create clock这样子的东西
+还有set don't touch network、set fix network
+set fix hold这些的就会
+跟这边的clock有关
+那这边就可以看得出来我们出进去
+跟它实际上执行的
+我们出进去可能不只对应到一条直径
+例如说我们set input delay
+然后在input A里面的
+用wirecard来指定input A里面全部的人
+这样子它detail来说
+就会给input A所有人都指定
+我们要的input delay
+所以它就会是一项一项分开的
+而不会是A的全部的人一起设定的
+所以里面的设定会长这样
+下一个部分就是standard delay format
+这个是很重要的
+我们standard delay format
+里面就会提供我们关于
+你的这个design里面的delay讯息
+所以可以用下面这个
+SDF的write指定来写出来
+那么在这边的图里面
+我们就可以看得出来说
+它里面的很多数字指的都是delay的资讯
+所以这边的每一个
+在你的design里面的所有cell
+每一个cell它都会帮你去
+输出delay资讯
+这个delay资讯是蛮重要
+我们必须要在后面的gate level simulation去
+引入的样子
+讲完了输出的档案
+SDC,SDF跟.v档
+这里还有gate level netlist
+这个.v档需要去输出
+就是write format very log到你的这个
+file name里面
+这边它就会告诉我们
+它总共用了什么cell
+来去拼出你的gate level netlist
+那就是很detail的
+所以在这边就是秀出了
+合成前和合成后一部分的
+.v档的范例
+这边就是有一个ALU的RT
+这边是gate level netlist
+是用AL去合出来的
+比如说exclusive or cell
+inverter or
+exclusive nor之类的这些cell
+这个就是我们合成出来detail的
+gate level netlist的结果
+这边就
+如果我们是用graphical interface
+我们用图形界面来做合成的话
+这边的动作可以改成
+是用GUI点的
+上面也会提供更多options
+所以可以尝试用GUI
+了解一下它的功能大概是在干嘛
+但是我们主要比较多
+确定好功能之后还是会使用
+输入script的方式
+下一步是
+gate level simulation
+也就是我们要怎么样
+去针对gate level netlist
+使用ncvlog
+来做模拟
+我们合成出来的netlist
+就会在这里再做一次建录上的模拟
+就是gate level
+的simulation
+这边的用意就是要确认说
+你所合成出来的这一套电路
+是不是像RTO所想要表达的意思
+符合你想要的功能需求
+所以就可以利用ncvlog或者vcs
+这类simulation用的tool
+配合我们在前面做RTO的时候
+已经用的testbench
+我们的gate level netlist
+来做模拟
+这需要用到的第一个是testbench
+然后testbench这边很重要的是
+我们必须要在里面加上sdf
+annotate这一行的指令
+这个大家在上礼拜的lab里面
+应该有做过
+因为上礼拜lab就是档案里面是把sdf
+正常给注解掉的
+同学们应该是把这个东西给uncomment掉
+让它正常显示回来
+它才会去吃到sdf这个档案
+还有一部分需要用到的
+就是gate level netlist
+就像前面显示的gate level netlist
+它里面就会包含了所有你在DESIGN里面
+所要用到的style是什么
+但是很重要务必要记得的是
+include sdf这个档案
+因为它包含了你所有的delay讯息
+如果没有包含的话
+那你的delay讯息会是错的
+就会导致很多问题
+这边还要去include cell model这个东西
+通常可能在作业或lab里面
+给同学使用的是TSCE3那个
+它的功能是前面我们提到了
+这样的gate level netlist
+它要呼叫里面的这些cell
+我们要提供它一个very log的behavior model
+它就有办法去叫到这些cell的very log module
+这个cell里面就是提供这些东西
+它的功能上面的讯息
+gate level simulation就是要使用一些
+可以用scv log来这样子的指令它成
+就是scv log加testbench
+加你的gate level.v档
+-v是include library的感觉
+是那个意思
+你的cell model然后加xs加r是那个
+你要产生波形的
+这边提一下如果你没有好好include sdf的话
+会发生什么样的事情
+如果没有的话我们的delay讯息
+就会非常的不准
+在cell model例如TSMC3
+里面会有一些
+估计的delay值
+但是那个是非常不准的
+如果你没有include的话
+用这个超级不准的delay值来算
+就会有一堆violation
+算你的slack好像都没有问题
+但是你没有include sdf
+simulation还是跑得过 只是就会有一堆violation
+所以这样
+在上个礼拜的lab
+大家有看到如果我们顺利的annotate
+我们的sdf file就会在跑scv log之后
+过程里面有annotated
+的path delay数量
+那基本上要接近100%
+它才是有顺利annotate到你的path的
+那这边就额外再讲一下
+如果你需要使用memory的file来进行
+合成还有进行delay level simulation的过程
+大致上要做些什么事情
+那我们在合成的时候
+要提供technology library
+是所有cell的
+area跟delay资讯
+我们可以把memory也想象成
+我们要喂给design compiler一样的资讯
+memorygenerator生出来
+这个代表了memory的-lib档
+然后你可以把它compile成-db档
+然后跟着你的link library target library
+一起设定到design compiler里面
+把memory的delay资讯之类的
+你才有办法去合成
+所以我们就可以使用
+这样子include library的方法来生出
+一样是-v档和-sdf档
+如果我们要使用
+memory的module来进行
+get level simulation的话
+也跟刚才说的technology library需要有一个cell model的方式
+是类似
+我们同样要透过memorygenerator
+generate出一个behavior model mem.v
+这个东西来
+让我们可以知道这个memory的行为是什么
+基本上大家就想象memorymodule
+就和technology library有点像
+你需要提供-lib档-db档
+然后simulation需要提供-v档
+iopad的部分也是类似
+你可以在合成的时候
+把iopad合进去
+它的方法也差不多
+你所要用的那个制程
+相对应的iopad
+.lib档.db档
+加进technology library和link library里面
+就跟memory差不多
+这个pad的delay讯息之类的
+还有它的area讯息等等
+在做simulation的时候
+也一样要把tpd973g
+例如说某个制程下是这个档案
+这个.v档的behavior model
+必须要南瓜进来来做get level simulation
+这个大概是
+get level simulation主要注定的细节
+那接下来呢
+在讲解file之前
+另一部分关于timing的东西
+要再跟大家解说一下
+补充一下
+static time analysis这个东西
+具体上是怎么算的
+static time和hold time这两个东西的要求
+是指最快的速度要求
+还有最慢的速度要求这两个部分
+但实际上它的analysis方法
+是透过static time analysis这个步骤
+不过这边就是想给大家一个初步的概念
+知道它大致上是怎么做的
+下礼拜的课程里面会有static time analysis
+更详细的介绍
+我们要告诉我们
+算的时候到底是怎么算的
+我们所出来的
+timing report里面的stack
+它指的是什么,它怎么算出这个stack
+所以我们在alternation的时候
+就会一直做static time analysis这件事情
+我想用一个
+很简单,有点trivial的例子
+解释一下static time analysis
+假设说我是一个送货员
+我1点钟的时候要从A站出发
+2点钟的时候要把货送到B站里面
+路程在slow condition
+慢的状态下是42分钟
+快的状态下是16分钟
+在B站要求我预留
+15分钟的setup time
+要求我提早15分钟到
+要求我1点45分钟就要到这个地方
+我们的require time
+是1点45分钟
+我就跑了这条唯一一条路
+最慢的condition下在1点42分会顺利抵达
+我抵达的这个瞬间会去overwrite掉
+这个地方原本的data是什么
+所以我顺利赶上了
+3分钟的余裕
+余裕就是指stack是宽松的意思
+我还有3分钟的宽松时间
+所以我的setup stack是3分钟
+这是实际的例子
+应该说生活的但是不是电路上的例子
+还有第二个要求
+因为每天2点的时候我都会把货
+送到B站
+每天2点过后资料都可以hold住10分钟
+不可以被overwrite掉
+直到2点10分都不可以被overwrite掉
+我在什么时候会被overwrite掉
+2点钟出发的这个
+货
+有下一个送货员出发
+他会跟我跑同样的一条路
+最快最快到2点16分的时候抵达
+假设是最快的状况
+抵达的同时我的1号资料就被洗掉了
+幸好他没有太早来
+所以1号的资料还有6分钟的余裕
+可以满足hold time的要求
+hold time的stack就等于6分钟
+从刚才这个生活化的范例里
+我们知道说setup time的requirement
+require是1点出发
+2点下一个小时抵达的这个clock
+往回减掉setup time
+一个clock period减掉setup time这个时间
+所以我们的setup stack是require time减掉arrival time
+我们要求这个数值
+stack这个数值大于0
+表示我提早到了这是好的
+hold requirement则是
+在你的同一个clock往后加上
+hold time这么久的时间
+2点钟出发这里也是2点钟收的资料
+不可以被overwrite掉
+每一批资料都必须要晚于10分钟这么多的时间到
+require time是10分钟
+我的hold stack是arrival time减掉
+require time
+这个是相反的大家注意一下
+这个大于0
+接下来我就靠这个定性的
+就是这个范例来定性的
+不是劣势值的让大家想象一下
+非理想的clock对于timing requirement会有什么样的影响
+首先就是看clock skew
+skew的定义是
+你的clock edge要加上这个skew才是
+真正抵达register的时间
+范例里面A的skew是2分钟
+B的skew是8分钟
+A每个证件的时钟1.02分才来
+1.02分才出发
+B收资料的基准是每个证件的08分
+在这个范例里面
+B的skew比A的skew还要大
+请问同学这个时候
+setup time的require time
+会更容易达成还是更难以达成
+setup time会更好达成
+但是hold time会反过来更难达成
+如果反过来是A的skew大于B的skew的话
+就会变成hold time比较好达成
+但是setup time比较难达成
+所以大家可以定性的理解一下skew
+跟hold time setup time要求的关系
+至于在clock
+on certainty的方面
+on certainty显然是会放setup time的要求
+和hold time的要求都变得更严格
+就是让你的slack都变小都变负
+所以有时候在
+STA的公式里面setup time的on certainty
+hold time的on certainty会写成一加一点这种
+大家如果知道说on certainty是往
+slack一定会变小require time一定会变难达成
+这个方向想可能会比较容易去
+记忆这个公式
+所以后面都有一些
+比较practical的公式
+会列出来这样子
+setup time就是我抵达这个clock的时候
+必须要往前多久时间时间准备好
+然后hold time是往后多久时间我必须要
+hold root不能够被同一个clock来的
+下笔资料给overwrite掉
+我们这边就在用比较
+式子的方式来定义所以我们如果从register 1
+透过这个combination logic
+前往register 2
+在setup time的要求下前面这个
+clock是我出发的clock
+launched edge
+launched edge是锁住的意思
+它就是收资料的那个edge
+launched edge跟launched edge在CR time的
+分析下会相差一个clock period
+相差period这么长
+那接下来就考虑skill的部分
+假设我用launched edge
+当做时间的零点
+register 1的skill是tclk1
+所以我们的clock arrival在
+register 1的时间就是tclk1
+那我们的
+arrival time of我们的资料在
+在第二个port上面
+arrival time就是tclk1
+clock arrival time加上中途的path delay
+path delay包含两部分
+从clock到output
+register内的delay
+register从这里出发
+经过combination到这里的data delay
+这两个加起来就是path delay
+合起来就会变成arrival time
+我的data requirement的time
+是什么时候呢
+首先launched edge抵达register 2
+是在下一个clock再加上
+第二个clock的skill的时候
+所以这个时间往前减掉sale time那么长
+就是我required的时间
+因为可能有uncertainty需求
+所以我就再把时间减得早一点
+要求变得更严格一点
+这个就是sale time的require time
+在hold time的要求的时候
+我们会分析第二个launched edge
+clock arrival在第一个register
+新的一笔资料的时候
+就是一个period之后
+再加上skill这么多
+arrival time就是这个clock抵达时间
+再加上path delay这么多
+至于hold time的要求呢
+hold time一样是针对于launched edge
+的clock arrival
+这个clock arrival time
+往后加上hold time这么长
+为了uncertainty我们再往后加多一点
+这么长的时间
+具体上来说我们的
+我们的slack计算方法就是set up的部分
+require time减掉arrival time
+就是透过前面的公式
+arrival time就是资料抵达的时间
+下一个clock抵达register2
+往前减sale time那么多的时间
+在hold time的部分
+require time就是launched edge
+往后加skill这么长
+再加上hold time这么多的时间
+我要hold到这个时间点为止
+arrival time新的一笔资料
+下一个clock出发
+这边因为是arrival time减的require time
+他们是分析launched edge
+同样一个edge的时候
+所以其实这个period
+可以不需要去管它
+hold time是跟clock period没有关系的
+有些公司里面这个东西就会被删除掉
+这样子大概就是计算set up stack
+和hold stack的方式
+希望大家知道这样子的
+计算timing requirement的方式
+最后再勾注一下
+一些file demo的部分
+这边我们就提供了合成用的tico档的example
+sdm的一些相关file
+和sale model
+里面装了什么的这些资料
+在合成用的script里面
+第一部分是library的setting
+这部分比较重要的是
+target library
+和link library会设下这些东西
+target library通常就是放你的technology library
+还有你要用到的sdm
+或者是pad之类的
+link library就是这些东西
+再加上designware foundation.sldb
+这边比较重要的是大家要知道
+technology library里面大致上
+比如说standard sale的model里面是有什么样的讯息
+为什么这些讯息可以在合成的时候帮助我们
+去compile
+designware这个library里面大致上有什么
+使用的
+在
+后面会有一些相关的设定
+这部分比较detail一点
+就不需要去印记
+接下来
+在readfile的这个步骤我们有讲解过
+elevator
+这些指定
+design constraints这边
+这边的card constraints就蛮重要的
+希望大家就知道这些card constraints是为了什么而设
+那为什么这些设定是对应到
+怎么样的性质
+其中一部分是要在APR的时候删掉的
+那在environment setting部分
+我们有讲解过operating conditions
+希望大家知道max library
+这些他们指定上面的写法是什么
+有max有slow
+而且也知道operating conditions指的是不同的pvt
+variation下面的状态
+所以pvtvariation他们各自指的大概是什么也是蛮重要的
+yloadmodel这部分也会在APR之前
+被remove掉
+然后这边还有eepo output load
+跟drive还有delay的部分
+这边也有讲到说他们代表的意义是什么
+在怎么样的状况下需要去设定他们
+场租里面的第一部分有design rule constraints
+有max transition composites
+那这边也就是大家知道
+它是针对于一条net的什么东西来做的限制
+这边也有讲说
+可以用iopad里面的实际
+可以直接写数值来设定
+这边是直接写数值的方式
+iopad的方式也有在前面的讲义提到
+那在合成的目标方面
+这里设定max area为0
+设定为0很重要
+就是希望它越小越好
+不是小到100就停了
+而是要小到最小为止
+就是帮我们solve multiple instances
+unique file的新功能是把每一个
+相同的呼叫module来给
+分别独立对待
+下面这个则是修正掉assign的问题
+fixed hold很重要
+一定要设计它
+compile的部分
+指定可能蛮多的
+希望各位了解的是
+retiming,clock gating,force pass
+指定可能还好
+希望大家知道它们各自代表的意义
+所以要用上的时候可以用到
+在report这边
+重要的也是大家要看得懂
+area report里面是什么
+还有timing report里面有什么样的讯息可以帮助我们
+trag naming raw就
+如果刚才讲它比较detail就还好
+这边的sdce sdf跟fail log file
+就蛮重要的是要
+要知道这些输出出来的档案是什么时候要用的
+如果没有用的话会
+gate level simulation就会失败之类的
+这个蛮重要的
+刚才有提过说大于键号的
+这个东西会让你把这样子的讯息
+输出在这个档案里面
+所以这个script里面的写法是它在最后
+再report一次没有输出到档案里面
+User可以在terminal看一下相关
+design timing area讯息
+后面就是补充一下sram
+跟iopad的file大致上有什么
+所以在sram相关的specification
+的file里面可以知道说
+这个sram它的制程是什么
+用在什么地方
+像是它的尺寸
+是什么之类的
+透过这边就可以知道ioport是什么
+它们分别是来做什么的
+在什么状况下它的area是多大之类的
+在specification里面也会有
+它的timing diagram之类
+就是这种你应该要怎么样设定的讯息
+也会告诉你它的sail time hold time
+这个sram的sail time hold time是多长
+它大致上是在delay一段时间才会print出
+你要的值之类的
+这个就会在它timing的一个
+资讯里面告诉我们
+所以前面是read的cycle
+然后后面也会有writecycle相关的资讯
+那我们刚才讲到说合成的时候
+如同technology library要加进
+target library跟link library这两个参数
+sram的library file
+点lib档 compile层点TV档
+也必须要加进去我们的target library
+link library里面那lib档里面
+它就会告诉你unit是多少
+告诉你delay是多少
+delay讯息area讯息之类的
+操作环境讯息可以帮助design conf
+合成跟sram对接的时候知道它要做什么
+iopad也蛮类似的
+iopad就是在我们合成完那个network之后
+可能会接上一个
+iopad脚位所用的东西
+那这边就跟sram一样
+同样会有点v档
+也有点db档在合成的时候要用
+点v档提供function在gaylevel simulation的时候
+要使用
+最后就是cellmodel
+我们刚才提过gaylevel simulation的时候
+要用tsnce13可能底线那个之类的那个
+那个样子的一个档案
+那个档案原则上是和
+technology library里面的cell是有对应到的
+所以它里面就会有所有cell的
+非常rough的delaymodel
+这个是非常不准的还有它的功能是什么
+所以我们在vloggaylevel simulation的时候
+gaylevel netlist里面会去呼叫出
+这些不同的cell
+需要透过这个点v档的library来告诉它
+behaviourmodel是什么
+这边就会有它的甚至更细致的一些其他讯息
+最后cell的model就是刚才也提过说
+我们可以使用net2的area来算一个等效的gate count
+这个path可以去找到cellmodel
+的document的档案那里面就有资讯可以参考
+后面这部分的档案就主要是补充
+那今天唱课准备的内容大概就到这边了
+那我们
+可能先休息一下10分钟
+那我看等一下我再回来解答
+同学有问的问题好了
