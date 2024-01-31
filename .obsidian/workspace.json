@@ -4,15 +4,37 @@
     "type": "split",
     "children": [
       {
-        "id": "28268e86741afcff",
+        "id": "25cf08f11e92ac79",
         "type": "tabs",
         "children": [
           {
-            "id": "3db05733955574b8",
+            "id": "c9df2ace53696c38",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {}
+              "type": "markdown",
+              "state": {
+                "file": "Verbatim/inflation.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "95bb5a6925cfd5af",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "d63551c3035e39e6",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "idea/通貨膨脹.md",
+                "mode": "source",
+                "source": false
+              }
             }
           }
         ]
@@ -65,7 +87,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "right": {
     "id": "e5db0e37405ecdb2",
@@ -81,7 +104,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "idea/情報的冗餘.md",
+                "file": "idea/通貨膨脹.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -98,7 +121,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "idea/情報的冗餘.md",
+                "file": "idea/通貨膨脹.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -121,7 +144,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "idea/情報的冗餘.md"
+                "file": "idea/通貨膨脹.md"
               }
             }
           },
@@ -154,11 +177,16 @@
       "bmo-chatbot:BMO Chatbot": false
     }
   },
-  "active": "96c4bfa10f9df915",
+  "active": "d63551c3035e39e6",
   "lastOpenFiles": [
     "Verbatim/inflation.md",
-    "idea/如何學習.md",
     "idea/通貨膨脹.md",
+    "idea/融資過程.md",
+    "Omnivore/2024-01-25/光復自己——保護隱私的分散式身分-moda blog-多媒體專區-公告訊息｜moda — 數位發展部 Ministry of Digital Affairs.md",
+    "Omnivore/2024-01-25",
+    "Omnivore",
+    "idea/姓名的由來.md",
+    "idea/如何學習.md",
     "idea/情報的冗餘.md",
     "idea/科技指標.md",
     "idea/How to distinguish between a tech bubble and a tech paradigm shift.md",
@@ -180,10 +208,7 @@
     "idea/運營風險.md",
     "Untitled.canvas",
     "Excalidraw/Drawing 2023-12-29 13.53.06.excalidraw.md",
-    "Excalidraw/Drawing 2023-12-29 13.52.53.excalidraw.md",
-    "idea/翻譯prompt.md",
     "Untitled",
-    "idea/如何做出選擇.md",
     "Diary",
     "Excalidraw"
   ]
