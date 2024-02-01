@@ -1,0 +1,960 @@
+那以往的話呢,在後端上我們受限制於學校的設計的規模都相對比較小
+所以很多在實務上需要特別注意的,我們也不是那麼的清楚
+那TSRI這邊的話,有相當豐富的經驗
+那相信可以帶給同學呢,這個在Place&Route方面呢,更多相關的知識
+那我們就熱烈的歡迎張年翔講師
+謝謝各位,我叫張年翔,你們應該可以看得到我的名字
+那我在TSRI大概做了二十年的APR的工作,所以其實也算蠻熟的
+然後接下來大概三週就是我會幫忙講APR的部分的內容
+那實際上三週課大概就是六個小時的時間,就對講解APR來說其實蠻少的
+但我會盡量的讓大家知道說APR裡面到底在做什麼
+就稍微能夠深入一點去了解裡面的一些問題
+那時間不多我們就可以直接上課
+那前面的那個大課程應該都已經教過了Value的Coding
+就你的Value的設計,然後你可能Value做完之後可能要先經過邏輯合成
+邏輯合成之後你就可以得到一個GayLabel的Netlist
+那接下來這個GayLabel的Netlist我們就會進到APR的階段
+就我們會把這些GayLabel的Netlist裡面這些原件,這些Sale
+Place到我們FinalTrip的那個Layout上面
+這個步驟我們就叫做Place
+就把那個Sale原件放在我們的Layout上面,就叫做Place
+然後把原本Netlist上面這些連線用Metal把它連接起來
+就真正把它繞線繞起來,這個就叫做Lout
+所以接下來這個SaleBase這個步驟我們就叫做Place and Load
+那Place and Load做完之後我們就可以得到一個GDS File
+然後其實就是可以拿來下線的GDS
+那只是說它雖然只是Place and Loading的問題
+可是因為中間有很多東西需要考慮
+像是Power的問題,或是Timing的問題,或是一些DRC的問題
+所以也不是說這麼單純就是直接反Place,反Power
+Loading就結束了的工作
+那在介紹流程之前
+我現在幫大家再講一下說
+對於SaleBase的Design來說,它有幾個部分
+對API來說,這個Design它就分成兩個區域
+第一個區域是外面這個Io這一圈
+這個我們叫做Io的Ring
+我們的Design一定會需要一些Input Pad或是Output Pad的一些功能
+就這些Pad它是負責把訊號從Chip外面送到Chip裡面
+或是從Chip裡面送到Chip外面這種Pad
+那這些Pad的Size其實很大
+原因是因為它裡面有一些ESC的電路
+所以它的Size跟一般的邏輯的元件比起來它的大小大很多
+那這些東西它會集中放在最外圈,就我們Chip的最外圈
+然後最外圈這些Pad除了這些Input Pad、Output Pad之外
+另外我們還需要放這些Power Pad或是Ground Pad
+那這個部分就是Physical Design跟Synthesis
+就跟邏輯合成一個很大的差異
+就我們開始會去注意Power上面的連線
+就我們要因為晶片回來的時候它一定需要吃Power
+那我們要把整個Power的連線都把它做滿、做足
+這個晶片它在使用上才能夠很正常的使用
+所以我們就必須要把Power真正的把它設計在電路上面
+那這裡就包括說我有Core內部使用的VDD和VSS的Power
+就專門提供電源給內部的電路來使用
+那除了這Core內部的VDD、VSS之外
+另外還有一種Power叫做Io的VDD和Io的VSS
+它是用來供應
+有人在說話嗎?
+宇辰,現在有人在問問題嗎?
+OK,沒有
+不好意思,打算繼續
+好,謝謝
+接著另外一組Power我們叫IoVDD和IoVSS
+它是用來提供這些IoPad
+就是現在外面這圈Pad所用的Power
+這個我們叫做IoVDD和IoVSS
+實際上一個Design裡面可能不只一組的CoreVDD、VSS
+也不只一組CoreIoVDD或IoVSS
+這其實是需要很多組合
+所以這是第一個部分,就是IoPad的部分
+第二個區域是Core內部的區域
+Core內部區域是會集中在中間的地方
+那些Standard Cell就真正有邏輯功能的
+就是我們電路主要的功能的那些元件
+它就是集中在Core裡面
+就我們叫CoreArea核心的區域
+所以裡面就我們的那些End or Endless的Cell
+它全部都是擺在裡面
+那所謂的Pressment,就是我們講Press and Load
+Pressment就是擺放這些Standard Cell
+把它擺到這個Core的區間這樣子的工作
+就叫做Pressment
+那另外還有一種那個元件我們叫做Block
+Block是一個很大的元件
+跟那些Standard Cell比起來是一個很大的一個元件
+那這個元件的大小是固定的
+它的形狀都是固定,都是不能動的
+那最常見的就是SRAM
+就我們使用SRAM,這SRAM其實就是一個Hard Mako
+就是它的功能不是一般Standard Cell的功能
+那它的Size都是固定的Size
+Block大部分來說也是也是都放在CoreArea內部
+它的擺放的位置也是在Core裡面
+但有些Block它可能因為跟Io相關
+比如說DDR或COSB
+它可能是屬於Core裡面的Io的部分
+那它可能就會佔用到IoPad的位置
+那有些可能會佔用到這個中間這個我們講powering的位置
+所以都有可能
+所以其實Block擺的位置是比較不確定的
+大部分來說還是在那個CoreArea裡面
+算是一個基本的大概上的影片的那個架構
+所以再下來我們就用幾張投影片
+先幫大家把整個流程全部都跑過一次
+因為有些人可能沒有實際上操作過APR
+所以你可能對整個流程還不是這麼有概念
+所以我們接下來的這些投影片就是讓大家能夠稍微有一點印象
+大概中間會經過哪些步驟
+所以APR的第二步驟我們叫Initial Flow Plan
+那這個步驟其實很單純
+就是把CoreArea的面積把它決定下來
+就我們要先設定一個面積
+讓到時候SalePlace的時候可以有地方可以放
+就幫我把這個面積決定好之後
+到時候Tool它就只能使用這塊面積來擺放這些SdanaSale
+所以這個是這個步驟的工作
+那其實詳細一點的話就是我們大概會去決定說
+這個Core的面積它的寬度多高
+寬度多寬然後它的高度多高
+然後它的寬度高度就決定那些部分
+可能會需要一些計算去計算出來
+大概會需要多大的CoreArea
+讓Tool可以把Sale有足夠空間可以擺進去
+那另外CoreArea這部分決定好之後
+我們還要決定Core和Io之間的這段距離
+這段距離是要給PowerLin去做拉線使用的
+就如果看到後面的影片
+大概會看到這裡有兩圈的那個PowerLin
+那就是讓它有到時候在架構電源線上
+有足夠空間可以去使用
+這個就是InitialFloorPan
+所以這次步驟其實還蠻單純的
+那只是說在這個部分之外
+我們同時也要把Io的順序也把它搞定
+因為實際上我們的Io有很多
+可能有一兩百根的那個InputPan或是OutPan
+那我們也會有很多的PowerPan和GroundPan
+那這時候在InitialFloorPan的時候
+我們也需要把這些Io的順序
+就你想要擺放Io的那些順序
+要先把它先設定好
+然後到底要加多少PowerPan或是GroundPan的
+也都要先設定好
+這些工作都是在一開始的時候就要先把它完成
+那完成這個步驟之後
+接下來我們可能會去安排
+我們的Block的FloorPlan
+就是這邊的FloorPlan主要的目標
+其實是擺放Block
+因為我們的XRAM其實也不是Preciment的工作
+當Tool它在做Preciment之前
+Block都要先確定它的位置
+它就是定時動的
+就Tool它不會自動的去把Block幫我們擺好
+所以我們就要先把這些Block確定下來
+那擺放這些Block到底要放在哪個位置
+我可能有很多個Block他們互相之間的關係
+這就是在這個步驟所需要做的工作
+我們要去參考整個Design的架構
+然後去安排說我大概應該要把這些Block放在哪些位置
+因為在Preciment的時候它的位置都是固定的
+所以變成說Tool要去遷就於這些固定的東西
+包括這些Block還有這些Io都是已經定時的位置
+Tool它要遷就這些固定的部分
+然後去調整內部的那些StandardSale的位置
+來搭配我們的BloorPlan
+這個就是這個步驟的主要目的
+那有些Module 尤其是一些比較特殊Module
+我們可能會考慮到它的一些繞線或是Timing的問題
+我們也可以去安排那些ValorModule去指定說
+它應該要擺放在哪些位置
+所以這樣的動作我們就叫做FloorPlan
+那FloorPlan做完之後Block的位置就確定起來了
+這時候我們就可以開始去進行那個Power的架構
+就架設我們電源線
+那需要連架設電源線的部分就是所有的元件
+它都需要吃Power
+就包括這些Io配的
+我們有Input配有Output配的
+這些Io配的它都需要吃Power
+然後Code內部的這些Block或者是Stainless Steel
+也都需要吃電源
+所以我們必須真正的把電源拉到這些元件身上
+那先講Io的部分
+Io部分的形狀它大概會長這樣
+它其實就是一個長方形
+就一個矩形的形狀
+實際上它的Power Pin的位置都已經先畫好
+就Sale Library在製作的時候
+它已經規劃好說這個IoPad的Power要怎麼連
+所以它裡面其實有很多橫向的Pin
+裡面可能有一些是IoVdd
+有些是IoVSS
+那有些可能是CodeVdd或是其他的一些控制訊號也有可能
+那對於這些IoVdd
+一開始Io擺完之後
+它中間Paid上Paid的中間都會有一些空隙
+那我們要做的就是把這些空隙的部分
+應該說把這些黃色的這些Power Pin
+全部把它連接起來
+那連接的方式是塞入一種Sale叫做IoFeeler
+IoFeeler的Sale它可以塞在這個Paid上Paid之間的空隙
+讓這個Paid上面的Pin全部都連接起來
+所以我們塞完之後
+整個Power Pin就會連接起來
+然後這個Pin裡面其中有一個可能是IoVdd
+它就IoVdd的電源就可以送到整圈
+就這一圈IoPad的Ring上面每個Sale上面
+就我們中間可能有一些IoVdd的Sale
+也許不止一個我們可能可以有很多個IoVdd的Paid
+那這樣子IoFeeler塞完之後
+整個Io上面的Power就算完成了
+就還蠻簡單的
+我只要把它全部都塞滿就好了
+那Io部分搞定之後
+接下來就換Code裡面的元件
+Code裡面元件剛提到說
+每個元件它都有Vdd和VSS Pin
+所以Block它可能會有Block這個Block的Vdd和VSS Pin
+然後Sale可能也會有Vdd或是VSS Pin
+然後這些Pin它的電源主要都是由Code Power
+Code的Vdd和Code的VSS Pin
+Code的Vdd和Code的VSS送進來
+所以這個是VSS
+Blocker VSS或Synaptic VSS都要想辦法連接到Code VSS的Pin
+就我們就要把這幾個點全部都接起來
+讓它們的VSS就算接起來
+那Vdd也是一樣的意思
+那要怎麼做
+做法就是我們會先在IoPad和Code之間
+我們會先放一組繞兩圈Ring
+這兩圈Ring其中一個就是Vdd的Ring
+另外一個就是VSS的Ring
+那這兩圈Ring其中一個就會接到VSS的Pin上
+另外一個就會接到Vdd的Pin上
+所以這兩圈Ring它就帶有Vdd和VSS的電壓
+那接下來就是所有的內部的元件
+要想辦法連接到這兩圈Ring上面
+所以我們接下來就要看到這個Block
+所以這個Block它有Vdd或VSS Pin
+比如說在這Block左邊這個Pin
+那我可以就想辦法往外稍微連出去一點
+它就可以連接到這個Power Ring上面
+但是右邊這些Pin它右邊沒有Ring
+其實右邊要拉的話
+它可能要拉到很遠的地方才接得到
+所以為了讓這個Block的Power能夠比較方便連接
+我們可能就幫這個Block先建一圈Ring繞在它旁邊
+所以這個東西我們就叫Block Ring
+它的目的是為了讓Block在連Power的時候比較方便連接
+就因為我有這圈Block Ring的關係
+所以這Block它只要稍微往外接出去一點點
+它就接得到了
+這個叫Block Ring
+接下來就是Standard Cell的部分
+Standard Cell在設計Standard Cell的時候
+其實已經考慮到這個Standard Cell它的Power連接了
+所以所有的Standard Cell它的高度都會是相同的高度
+然後它們擺放在Code裡面的時候
+它會擺放在相同的水平上面
+所以同樣一排同樣水平的這些Standard Cell
+Standard Cell它的VDD Pin的位置都會在相同的水平座標上
+比如說這些點都算是VDD的Pin
+那我們要做的事就只是拉條Metal從左邊拉到右邊
+把所有這些Pin全部都接起來
+這樣子整排的Standard Cell的VDD就會全部被接起來
+那VSS一樣就是也是從直接拉條VSS
+這樣子就可以把所有的VDD和VSS都接起來
+只是說這邊需要注意的是
+基本上在我們在做Power Plan的時間點
+這些Standard Cell還沒被擺上去的
+因為我們還沒做Place Map
+Standard Cell它是Place Map的時候才放上去
+所以實際上那些Standard Cell是不存在的
+這個概念其實就是說
+我們先把所有的電源全部都架設好
+就把這些東西我們叫File Pin
+因為它是跟著Standard Cell的Pin去拉線的
+所以我們把它叫File Pin
+在Cell還沒擺放之前
+我們就把這些File Pin全部都先把它架好
+那等到Cell做Place Map的時候
+不管Cell放在哪個位置
+它自動的就可以連接到Power或是Ground
+它的VDD、VSS就可以自動連接起來
+所以我們就完全不用去考慮到
+它擺上去之後的Power的問題
+因為我的Power都已經拉好了
+它只要一放上去它自動的就會有VDD、VSS可以使用
+這是CellBase的設計
+它所有Power的東西全部都放在流程裡面
+所以我們幾乎不用去擔心說
+它會不會有Power連線的問題
+做到這個程度基本上所有的元件就有Power了
+只是說這樣子還不夠
+原因是因為Cell內部的Cell的數量很多
+所以電流需要流進File Pin
+送到這個Chip裡面去
+這個電流量太大
+因為我內部元件太多
+所以它需要送個很大的電流流進去
+這些File Pin本身的寬度不是很寬
+所以上面帶一些Metal的電阻阻抗
+就當一個電流流經過這些電阻之後
+它造成的效應叫做IR Drop
+就原本在Ring上面電壓假設是1V的電壓
+它流到中間之後它搞不好就剩下0.9V的電壓
+對我們來說這0.9V電壓就不是我們預期的電壓
+裡面的功能可能就沒辦法完全的掌控
+所以IR Drop的問題就必須要解決
+那要怎麼解決
+解決方式就是不要讓所有的電流
+全部從File Pin送到內部去
+我們會做一些垂直的線
+這個叫Power Strip
+就垂直的這個紙條線
+就讓這些紙條線可以幫忙安運這些電流
+就不要讓所有電流是經由這個File Pin連進去
+這些Power Strip就可以幫助把電流從
+用垂直的方式送到裡面去
+那當然Power Strip跟File Pin會有VR連結
+就可以再把電流再送到裡面的Zero上面
+這樣子就可以把電流分散開
+那這樣就OK了嗎?實際上還不夠
+原因是因為電流量還是太大
+我們的IR Drop還是太嚴重
+因為Strip很大的時候
+這裡面的Sales數量實在是太多
+那尤其是晶片製程更進步的時候
+裡面的元件的數量它的成長速度也很快
+所以單獨一個垂直的Strip還是不夠
+所以我們還會再做出水平的Strip
+水平的電流從旁邊流進來之後
+它還是一樣可以經由水平的Strip
+送到Strip裡面去
+那當然水平Strip跟垂直Strip會有VR連結
+所以它一樣可以經由電流再送到垂直的Strip
+然後再把電流再送到最底層的File Pin上面
+那這樣子就大概是整個CellBase Power的結構
+所以我們現在通常會建議學生
+你在做Power Plan的時候
+這個Power Strip盡量就是能夠做水平和垂直都做
+我們叫做Power Mesh
+它像是一個烤肉架一樣
+就是垂直和水平互相交錯
+其實我們是巴不得整塊Power Plan全部都像鐵板一樣
+所有電流四面八方都可以任意的供應進來
+這樣這個IR Drop其實可以做到最小
+但是這是不可能的
+因為我們要保留一些Metal的Resource讓烙線來使用
+所以也不可能把所有的Metal全部都拿來當Power使用
+因此在做CellBase DIY的時候
+這個Power的密度其實是我們非常在意的
+也希望學生以後在做晶片的時候能夠在這個地方多花一點心思
+因此就盡量的讓所有的Power Plan做到
+所有的可用的資源全部都把它用光
+所以回到流程這裡
+Power Plan大概就是這樣
+大概把Power Rune然後Block Rune
+還有Power Mesh還有Power Pin全部做完之後
+在我們的Power Plan其實就完成
+完成Power Plan之後
+接下來就可以開始擺放Cell
+Cell它就會擺放在這個Code Area中間
+所以我們把Cell擺到Code上面的這個工作
+這個就叫做Pressment
+就是我們講Pressed and Loaded Press
+Tool它就會把我們的Standard Cell放到Code裡面去
+其實Tool它在擺的時候
+它會需要考慮到很多的問題
+包括一些Global Pressment
+它可能要去分析說Module要怎麼擺放
+它需要去考慮到一些Conjunction的問題
+就是擺完Cell之後
+Load線要有辦法Load出來
+它的Loading的Resource夠不夠用
+那它去考慮到Timing的問題
+就Self Time或是Hold Time的問題
+Clack Gate在Timing上考量會有不一樣的考量
+因為Clack Gate會影響到Clack Latency的長度
+所以它在Pressment的時候也是要去考慮這種問題
+那可能還要去考慮到Power的問題
+就是說對一些選Cell頻率比較高的那些Net
+它的Loading能不能調小一點
+就它的線長能不能短一點
+那它的Power相對燒起來的Power就會減少一些
+所以這也是Power GVent的Press
+或是DRC的問題
+那這些都是Pressment的工作
+還好我們不用考慮這麼多
+就對User來說
+對我們來說我們要做工作就只有一個
+就是把Pressment去指
+我們可能把Pressment GUI把它按OK
+然後它就開始去做Pressment
+所以基本上就是從Pressment之後
+就算是Tool的工作
+我們就要想辦法
+我們就是把這些步驟把它跑完
+大概是這個意思
+所以這是Pressment
+Pressment做完之後
+這個Spare Cell的位置大概就算是被擺進來了
+接下來的步驟我們就叫做Clack GVent
+Clack GVent
+Clack
+一個Design的Clack
+它是從Chip外面送進來
+那它大概會送到Chip裡面所有的Free Fab的上面
+所有Free Fab它大概都會接到同一個Clack上面
+那我們的Free Fab的數量可能很多
+可能是幾萬個或是幾萬個都有可能
+就我們的Free Fab數量這麼多
+所以一個Clack它的Fan Out的Loading很重
+那要解決這個Fan Out Loading的方式就是要加Buffer
+我們要加很多的Buffer
+去把這個Clack訊號能夠把它推動起來
+它只是說加了這些Clack的Buffer的位置
+跟這個Buffer後面連接的Cell的位置有關係
+所以這個Buffer應該要加在這些Free Fab
+它就是它連接的Free Fab的負責
+所以它可能要有一些座標位置的一些資訊
+才有辦法加這些Buffer
+那因為這樣子的關係
+所以Clack的問題它就被保留在Palacement之後來處理
+或者說CTS之前的階段
+我們對Clack的概念都是Clack它是一個Ideonet
+我們完全不管它的Fan Out的問題
+那我們是直接去假設它的Latency
+它的從Clack source到Clack最後端點的Latency的時間
+我們直接假設一個數字來表示說
+這邊有一段的Latency
+要用這種方式去做timing的分析
+這是CTS之前的狀況
+它是一個Ideonet
+那CTS之後Latency就被丟掉
+Clack Latency就被丟掉了
+我們就直接用Clack Buffer的Delay
+當然是Clack source到每個Register
+到每個Free Buffer的Delay
+它就是真正的去用Cell Delay的方式去計算出來
+總之這個就是Clack Tree
+因為Clack Tree影響到timing的問題非常的直接
+在CTS的公司上面
+Clack的Delay是直接影響到timing的計算
+以CTS做得好不好對Cell Base的timing來說
+也有很決定性的影響
+總之這個步驟我們就叫做CTS
+它是必須在Presiment完之後才可以做的
+做完之後我們底下就會加了很多的Clack Buffer
+最後就叫Latency
+載完CTS之後我們最後就可以互交Latency
+Louding就根據Netlist的連線
+真正的把Cell和Cell之間的那些連線
+然後用Metal Line把它先拉起來
+所以在Layout上面你就會看到密密麻麻的這些連線
+那實際上Louding也是要注意很多問題
+它有timing的問題、有Cross Talk的問題
+或者是有一些指稱的Atenna的問題
+可能有一些Shielding或是9-Default rule
+可能有些比較特殊的Net想要用比較寬的Metal的繞線去做繞線
+這些功能都算是Louding它提供的功能
+User要做的事情很簡單
+就是呼叫Louding來執行這樣就可以了
+我們做的工作其實是買一套很好的Tool
+很好的Tool、Louding的engine
+然後就直接去呼叫它
+那剩下的工作就是Tool的工作
+所以我們基本上Default做到這步驟
+我們也沒有太多能夠置入的空間
+也是交給Tool去執行
+所以CellBase流程其實大概就是這樣
+那我們再複習一次的話就是
+一開始的時候我們在Initial Floor Plan的時候
+我們就會先把Io擺好
+然後把一些Block的位置把它固定下來
+就叫Io Placement還有Floor Plan的工作
+就先把那些該固定的部分都先固定下來
+固定好之後就換Tool的工作
+Tool它就可以去執行Placement
+Placement做完之後
+我們就可以去做Clutching
+CTS做完之後就可以做Louding
+然後之後就底下又結束了
+所以其實把這個順序抓好的話
+APR其實也沒有這麼難學
+它基本上就是Placement、CTS、Louding就完成了
+那當然也不是這麼單純
+因為裡面還是有很多小細節
+那首先我們先來看的是說
+在這三個步驟之間
+我們發現它不是這麼單純
+就是只有一個Placement或是CTS的工作
+它其實中間還有幾個小步驟
+那這些小步驟主要是
+Timing的Artemization跟Timing的那幾次
+我們會有一些Timing分析
+和Timing最佳化的工作在這裡面
+每一個區段其實都有很多的
+Timing分析和Timing最佳化要做
+為什麼會要這麼不斷的去做
+Timing分析和Timing的最佳化
+主要的原因是因為
+Intercontinental的不確定性
+也就是說
+如果它要去做最佳化
+它必須要去分析Sale的Delay
+比如說這邊可能有一個Sale Delay
+有一個Sale,有一個Buffer
+那這個Buffer它的Delay
+就訊號從輸入到輸出之後
+它到底會花多少時間
+它跟這個Buffer後面的負載有關係
+後面的負載越重
+通常這個Buffer的Delay就越長
+所以要算Timing分析
+就必須要知道這個後面的Loading多重
+但是這個Loading主要的來源就是
+Interconnection路線
+路線之間的路線
+而這個路線在一開始的
+資訊其實是很模糊的
+它當然是在Final Loading
+就最後路線出來之後
+它才能夠確定下來
+那它在前面階段
+其實是一個很模糊的概念
+但是我們雖然說這個
+Interconnection的資訊不是這麼清楚
+可是我們還是需要去做Timing分析
+那要怎麼做
+我們做法就是去猜
+去猜說這邊的Loading到底是多重
+這個Interconnection的負載到底是多重
+比如說做Placement完之後
+我大概可以知道Sale和Sale
+它們互相擺放之間的那個距離
+那我就可能可以藉由這個距離
+去猜測說這邊的Loading
+大概路線大概有多長
+然後可以猜出它的Loading
+大概是到什麼樣的程度
+這個就是去估計它的那個負載的狀況
+這個Loading的資訊就變成說
+我在Placement之前和Placement之後
+其實就是一個分水嶺
+就在Placement之前的這個Interconnection Loading
+它是一個更不清楚的狀態
+那Placement之後
+因為我有Sale的位置的資訊
+所以我們就可以有更清楚一點
+那個負載的資訊
+因此Placement在APR裡面
+就是一個Timing的分水嶺
+就是我們在
+因為我做完Placement之後
+對於Timing的資訊
+就有更強一點的把握
+所以我們在因為Timing的資訊更新了
+就它的資訊有更加的清楚
+所以我們在這階段之後
+就會有Timing的Ultimize和Timing的那些
+根據現有的資訊
+馬上可以去做最佳化和分析
+那CTS也是另外一個分水嶺
+CTS做完之後對Clark的資訊
+就變得清楚很多
+因為我剛剛提到過
+CTS之前的Clark是Ideal的
+就完全假設的一個資訊
+那CTS之後的資訊就是一個
+真正根據那些Clark的Buffer
+還有ClarkNet算出來的結果
+所以Clark資訊就變得比較清楚
+而且Clark的Timing直接影響到
+那個STA分析的Timing
+所以CTS之後也是一個
+需要做Ultimize跟Timing分析的一個階段
+那Louding之後當然也是另外一個階段
+就Louding之後
+就Loud線都做完之後
+所以我們當然也要去做Ultimize跟Timing
+因此那個CellBase的那個
+Timing的階段
+實際上就是被這三個步驟所切割開來
+就我們在Presiment之前
+就叫做Pre-Pres的階段
+Presiment之後和CTS之前
+就叫做Pre-CTS的階段
+到CTS之後和Louding之前
+就叫做Post-CTS
+Louding之後就叫做Post-Loud
+就每個階段它的Timing都要
+都要想辦法把它壓縮下來
+就根據它們現有的階段
+現有的資訊能夠去做Timing的分析
+還有Timing的最佳化
+那我們是希望說
+這個Timing從一開始到最後是
+不斷的收斂下來的
+就雖然說在前面階段它的資訊
+就RC資訊是比較模糊的資訊
+當然我們就用現有的資訊
+把它去做壓縮
+就把Timing壓縮起來
+讓Timing從一開始比較發散的狀態
+一直到最後面Louding之後
+它能夠漸漸的收斂下來
+這樣子最後的Timing才能夠滿足
+這個雖然是一個蠻重要的概念
+其實我們每個階段的Timing都要
+都要能夠盡量的去滿足
+到最後這個Louding之後的結果才會是對的
+那LoudingLoud完之後
+基本上那個API就算做完了
+做完之後
+可是實際上有一些收尾的工作
+這些工作算是比較Minor的工作
+但是還是得做就是了
+做完之後
+我們就可以得到一個GDS
+這個是下限的時候
+我們要提供的就是一個GDS File
+所以我們很快就把Delay Flow介紹過一次
+接下來我們就直接進到Tool的操作
+Innovus它是Cadence的Tool
+Innovus它
+我們現在用的APR Tool叫Innovus
+它的指令就叫Innovus
+我們指令就叫Innovus
+假設你一開始什麼都不做
+直接打Innovus
+通常Linux環境它會告訴你
+Command、Found
+就是找不到這個指令
+原因是因為EDA Tool它安裝的位置
+跟一般的Linux的Binary的位置都不一樣
+所以通常我們會需要去Source
+這個EDA Tool的環境
+TLSI在提供Tool的時候
+其實都有提供EDA Tool的一個Clear File
+Clear File裡面就會設定說
+這個指令指定檔
+指定指令的位置在什麼地方
+還有一些Library設定的問題
+Library的設定
+還有一些License的設定
+都會寫在那個Clear File裡面
+所以我們要先去Source這個Clear File
+它就會把那些剛才提到的那些Binary的位置
+還有一些License的東西把它設定好
+然後再指定Innovus
+Tool才找得到這個指令
+它那個GUI才會被帶出來
+然後Innovus它基本上是一個GUI的軟體
+通常跑一個GUI的Tool的時候
+我們習慣會在後面加一個End的符號
+表示說要把它跑在背景模式
+這個Terminal就可以釋放出來
+我們可以繼續加其他的指令
+但是這個對Innovus來說
+這個End符號不可以加
+原因是因為Innovus
+它還要佔據了這個Terminal
+這個Terminal會變成是
+Innovus它使用的
+輸入指令的Terminal
+所以這個End符號就不能加
+就我們千萬不能把那個End符號加在後面
+然後Initial file的部分
+Innovus在執行起來之後
+它自動的會去執行
+它的Initial file裡面的內容
+所以如果我們有一些指令
+在每一層都需要自動執行的話
+我們可以把它直接寫在這個檔案裡面
+Tool它自動就會執行裡面的內容
+然後Log file的部分
+Innovus的log
+它分成是Command log
+跟Message log
+Command log的意思就是
+我們每次下的指令
+不管是GI操作的指令
+或者是說在Terminal裡面
+下的那些用鍵盤敲進去的指令
+它都會儲存在這個End符號裡面
+Log file是Message的部分
+Message的部分就是
+下指令過程當中
+它的那些訊息
+它就儲存在Log file裡面
+然後它每次執行的時候
+它都會加一個流水符號
+在它的Log file的後面
+它不會把前面一次執行的Log file覆蓋掉
+它會在Log的後面加上一個流水符號
+所以每一次看到的Log的名稱都不一樣
+基本上我們就是
+Always就是找後面數字最大的Log
+就是現在執行的Log
+看Log其實蠻重要的
+因為Terminal上面的訊息太多了
+有時候我們捲回去的時候
+不容易找到我們要的東西
+所以也是要常常會有機會說
+我們可能要用編輯器
+直接用搜尋的方式去找
+看Log裡面有沒有我們想要的資訊
+然後GI部分
+就軟體叫起來之後
+這個就是它大概的GI的樣子
+它上面會有一排的Menu bar
+Menu bar底下會有兩排的Icon
+這兩排Icon上面這排就是一些
+像是Zoom in、Zoom out
+或是一些存檔的一些工作
+比較像一些一般GI的桌接面
+下面這一排就比較像一些編輯的工作
+比如說手動去畫線
+或者說手動畫一個Blockage的一些物件
+左邊這邊的Icon也是手動畫線的Icon
+基本上它的長相就長這樣
+在上面這排的右邊
+有三個比較特殊的鍵
+這個叫做Design view
+它分別叫做Full plane view、Amoeba view
+跟Physical view
+這算是比較需要講解的部分
+我們直接跳到後面這兩頁
+剛才提到的三開孔
+我們就叫Full plane view、Amoeba view、Physical view
+Full plane view裡面我們看到的那些Module
+Design的V-Org module
+它就是這些方方正正的Module
+方方正正的形狀
+這個是我們自己手動把這些Module
+抓進來的結果
+就當我把一個Module
+它抓到這個位置之後
+代表的意思就是說
+我們希望Tool把這個Module裡面的Sale
+Developer module裡面的那些Standard Sale
+我希望它放在這個位置上
+放在這個位置裡面
+所以我們擺放這些Module
+這個就是Full plane的意思
+我把Module放到這裡其實就是Full plane意思
+所以做完Full plane之後
+我可能會去執行Pressement
+Pressement Tool就會把這個Module的Sale
+把那些元件真正的把它放到Layout裡面來
+所以我們再切換到Physical view
+就會看到這些Standard Sale真正的被放在裡面
+因此Physical view算是一個最Detail的View
+就在這裡我們可以看到所有的Sale
+所有的繞線
+就全部就是說實體的內容都在Physical view裡面
+都可以看得到
+可是有些時候
+我們其實不是要看Sale
+被擺成什麼樣子
+我們常常可能是想要看到Module
+被擺成什麼樣子
+所以我們可以切換到中間這個View
+就叫Amibar View
+Amibar View是用描邊的方式
+它把Module的邊界把它描繪出來
+因為Sale已經被擺上去
+所以它就根據那些Sale被擺的位置
+把同個Module的那些Sale
+邊界把它描繪出來
+因為它彎彎曲曲的就像是Amibar的原從一樣
+所以它叫做Amibar View
+基本上我們在軟體執行過程當中
+可以任意的去切換這三個View
+所以它不會更動到這個Design
+但是它就是從三種不同的角度
+去觀看這個Design的狀況
+所以這三個開孔是比較需要介紹的部分
+前面這一頁是
+就是GUI最上面的那兩排
+這兩排我們就不要一個一個講了
+因為一個講其實很浪費時間
+而且大家應該馬上也忘記了
+所以我們就直接把它跳過去
+再來看到的是Display Control
+這是在GUI的右邊的部分
+就GUI右邊的地方
+這個就是Display Control的部分
+我們可以設定不同物件
+它的Visible跟Seletable
+每一個物件都會有兩個打勾可以勾
+左邊這個勾指的是Visible
+打勾的話表示說我可以從Layout裡面
+看得到這種物件
+Seletable的意思是說
+我可以用滑鼠去點選這個物件
+可以設定的物件有哪些
+就C很多
+比較大範圍的是
+我可以設定Instance
+可以設定這些元件能不能看得到
+就Visible或Seletable
+我可能可以設定Net或者是繞線
+我要不要看到這些Signal繞線
+或是Power的繞線
+也可以去設定要不要看到哪些Layer
+就可以根據不同的Metal Layer
+去設定它的Visible或Seletable
+這邊的加號也都可以展開
+實際上展開之後的Detail內容蠻多的
+這個也是大家真正在操作的時候
+在慢慢的去找
+到底我可以做哪些設定
+所以這邊直接就把它跳過去
+最後是Hotkey
+Invoice它也是一個Layer Tool
+使用Layer Tool
+如果學會一些Hotkey的話
+在操作上總是會比較快一些
+它也像是Virtuoso或是Laker一樣
+也是有需要手動去操作的部分
+這邊列出來的Hotkey是我認為一些
+比較常用到的Hotkey
+它不是全部的Hotkey
+全部的Hotkey如果大家需要找
+可以從這地方View裡面的選單裡面
+去看到全部的Hotkey
+左邊這些HPU Editor或是Fit
+它跟Virtuoso或是Laker的Hotkey
+其實是一模一樣的
+然後方向鍵就是上下左右的方向鍵
+大家應該可以看到
+這個就是Virtuoso的介面
+剛剛提到的是HPU Editor
+我可以直接去點某個東西
+然後可以按Q
+它就會叫出這個物件
+它的一些比較詳細的資訊
+就可以看到它是哪個Sale或是哪一個Type
+像是Net也是一樣
+你可以直接點某個Net一樣按Q
+它也會顯示說這個Net是什麼Net
+然後Fit就是整個畫面
+全部都Zoom到畫面裡面
+小Z和大Z就是Zoom Out
+按小Z的話它就是一直Zoom Out出來
+大Z就是Zoom進去
+其實比較常做的做法應該是
+直接用滑鼠的左鍵
+去選擇你想要看的部分
+選好之後它就是直接Zoom到那個部分
+方向鍵就是上下左右
+就可以把畫面一直往右移或是往左移
+ESC指的是說
+有些步驟如果操作到一半
+然後發現你要取消掉
+就按ESC
+所以這幾個Hotkey在
+這一顆或是這一顆其實都是一模一樣的Hotkey
+它應該很容易上手
+此規的部分它有個ICON
+就剛講到說那個ICON的功能
+就如果大家一開始用的時候
+一定不曉得這是什麼功能
+但你可以把郵標放在那個ICON上面
+就會有一個標籤秀出來
+告訴我們說這是什麼功能
+所以此規實際上在ICON上是找得到
+就我可以直接選擇這個
+此規就可以去量測說這個距離是多長
+這是畫Ruler
+但是把Ruler移掉的話就不在ICON裡面了
+所以把Ruler移掉就是我們在講義上面的那個大型的K
+按Shift K
+就可以把那個Ruler移除掉
+那下一個Hotkey是Space
+就是Select Nest
+Select Nest的意思是說
+很多時候我們在料裡面
+在同一個座標底下其實有很多的物件
+比如說在這裡面它其實有很多
+有Sale、有一些File Pin或是有一些Signal
+那我們有時候不容易去選到底下的東西
+那這時候怎麼辦
+我們可以把郵標放在上面
+然後按空白鍵去切換
+切換的時候它就會把底下的東西pop-up上來
+所以那個Space是Select Nest
+它就可以把底下的東西把它跳出來
+讓我們可以選擇得到
+這是Space
+然後E
+Popup Editor跟Edit群那個是跟Power編輯有關
+那我們就先跳過去
+接下來是0到9這個Hotkey
+0到9它分別對應到Metal 0到Metal 9的Visible跟Selectable
+其實應該說1到9是對應到Metal 1到Metal 9
+所以我們現在看到這個Metal 1
+它是Visible的狀況
+它是有藍色這些線它是可以顯示的
+那如果按一次數字鍵1
+Metal 1它就會從Visible變成Unvisible
+然後如果是紅色這個是Metal 2
+紅色這些線是Metal 2
+所以如果按一次數字鍵2
+那紅色就消失掉
+那如果再按一次數字鍵2
+它就會從Unvisible又變為Visible
+所以我們就是從那個鍵盤上
+我們就可以很快的去控制說
+我們想要去看到哪些layer
+在Debug的時候其實常常也會用得到
+就是那個Visible layer的Visibility的Toggle
+然後大寫的V是把Variation清除掉
+有時候做某些步驟之後
+你可能在layer上面看到一些白色的叉叉
+那它可能是我不想看的
+我可以直接把它清掉
+它也許不是真的錯誤
+清掉的話不代表錯誤就被解決了
+它只是把那個Marker拿掉而已
+然後下一個那個Hotkey是NextVir
+大寫N是NextVir
+它的意思是說
+Signal在連線的時候它是靠Vir去連線
+那這個Vir是在Library裡面已經定義好的一個物件
+有時候我們可能希望它換成是其他Vir
+那你就可以選擇這個Vir
+然後按大寫的N去換成是其他的Vir
+一般來說Library會提供各種不同的Vir
+有些是有DoubleVir的
+有些是比較長的Vir
+有些是比較方正的Vir
+我們可以用那個NextVir這個Hotkey去切換
+最後一個是F12
+F12的意思是說我們可以把畫面變暗
+比如說我可能在操作選擇了某個東西
+但是選到的東西其實看不大清楚
+我們就可以按F12
+那F12就是它其實是有三個三段的開關
+就是它可以把畫面變暗
+那第一段看到的樣子就是大概像這樣子
+在我選到的東西就變得比較清楚一點
+那可以再按一次
+它背景就變得更暗
+然後再按一次那個又恢復成原本的狀態
+所以它是把ThreadKey的Background把它
+就把畫面變暗的意思
+這部分也是大家慢慢的去熟悉一下
+一開始的時候你當然沒辦法全部都熟練
+但是在操作軟體的時候
+如果有遲到更多Hotkey的話
+其實在操作速度上當然會有幫助
+OK
+那我們現在順便要休息10分鐘
+好啊那我們就先休息一下
+就待會再繼續上課
+這3點20再繼續上課
