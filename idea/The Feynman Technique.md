@@ -9,7 +9,7 @@
 4. Wherever you create a wordy or confusing explanation, try to either simplify the language, or create an analogy to understand it better.
     試著用更簡單易懂的語言或是類比去描述你想說明的內容。
 
-If you're trying to **understand** an idea, you can walk through this technique very slowly to pinpoint exactly what you don't understand, so you can go to the textbook, lecture notes or a teacher and figure out exactly what detail you're missing.
+ If you're trying to **understand** an idea, you can walk through this technique very slowly to pinpoint exactly what you don't understand, so you can go to the textbook, lecture notes or a teacher and figure out exactly what detail you're missing. 
 
 如果你的目標是理解這個概念，則專注於第2和第3步驟。
 

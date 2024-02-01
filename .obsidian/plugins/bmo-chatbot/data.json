@@ -1,15 +1,13 @@
 {
   "apiKey": "",
   "max_tokens": "",
-  "model": "solar:latest",
+  "model": "nous-hermes2-mixtral:latest",
   "allModels": [
+    "dictionary:latest",
     "llama2:latest",
-    "midjourney-prompt-generator:latest",
-    "mixtral:latest",
-    "solar:latest",
-    "zephyr:latest"
+    "nous-hermes2-mixtral:latest"
   ],
-  "system_role": "",
+  "system_role": "你是專業的人工智慧助手。你的回答語言都是繁體中文",
   "temperature": 1,
   "userName": "USER",
   "chatbotName": "BMO",
@@ -21,11 +19,9 @@
   "openAIBaseUrl": "https://api.openai.com/v1",
   "ollamaRestAPIUrl": "http://localhost:11434",
   "ollamaModels": [
+    "dictionary:latest",
     "llama2:latest",
-    "midjourney-prompt-generator:latest",
-    "mixtral:latest",
-    "solar:latest",
-    "zephyr:latest"
+    "nous-hermes2-mixtral:latest"
   ],
   "allowOllamaStream": false,
   "localAIRestAPIUrl": "",
