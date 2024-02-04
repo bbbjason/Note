@@ -1,0 +1,1073 @@
+那個FloatPlan
+那FloatPlan一開始就是做InitialFloatPlan
+InitialFloatPlan只是把那個Trip的Size定下來而已
+那定下來之後
+就我們的Code的大小已經固定下來
+我們就會開始去做FloatPlan
+那FloatPlan最主要的那個工作就是擺置Macro
+就是我們的X-RAM的這些元件
+就比較Hard Macro
+那我們可能會讓Tool自動擺
+就可以用Press Macro讓Tool自動幫我們擺
+那我們可能擺完之後
+覺得某些地方是確定的
+就可以把它Fix下來
+就可能把某些Block先Fix下來
+然後再讓Tool再去繼續
+根據我們Fix下來的部分
+再去擺其他的Macro
+就是可能會有一些Iteration在這個地方
+那在等的差不多
+我們覺得說這個FloatPlan差不多完成了
+這個地方只有Block就算可以完成了
+那只是說
+Block到底要怎麼擺這件事情
+在APR這邊其實它不是一個
+沒有一個完全的規範說我們到底要怎麼做
+那原因是因為Design本身很複雜
+就設計上每種不同的設計
+本來它的結構就不一樣
+所以沒有一個規則說它一定要怎麼做
+那只是做APR工程師
+一般會有一些
+我們會有一些習慣
+我們大概會知道說
+大概要怎麼做在後面的步驟會比較順暢
+比較不容易碰到問題
+所以它算是一個該耐的一些工作
+那到底用哪些習慣
+大概這裡就是列出這些
+我們常常拿的一些原則
+第一個是我們大概盡量會把這些Block
+擺在那個Code的周圍
+就是像這裡就是我們比較不會說
+一開始就直接把它塞到Code裡面去
+我們大概都是往周圍去塞
+那原因是因為Block它本身在Louting上面
+其實算是一個障礙物的元件
+就是這個Block它大概已經把這邊的Layer
+幾乎大部分的Layer都用光了
+它可能從Metal 1到Metal 5
+或是Metal 6全部都已經用過了
+用滿了
+所以如果要在一個Block的兩邊去繞線的話
+它需要跳到更高的Layer
+它也許跳到Metal 7、Metal 8去去繞線
+那如果說Metal 7和Metal 8不夠用
+它可能就要去做繞道
+就我們叫Detour的工作了
+那當然這樣子造成效果
+是它的Louting用的比較多
+而且它的Time可能會變得比較差
+所以一般來說我們在擺Block
+通常是盡量往邊邊去塞
+因為邊邊的這個繞線
+大部分就只有IoPad的繞線
+所以那個數量其實相對來說少很多
+就比較不會影響到那個繞停的問題
+這個是第一個大家常用的原則
+那這邊再強調一次是說
+這些原則並不是一個規則
+就它不是說你不擺在中間
+你就一定有問題
+它只是說
+當我們還不確定它到底要怎麼做的時候
+我們其實就會盡量先用這種方式去做
+那待我們擺的時候
+我們會去考慮到它的連線
+就它比較有關係的那些Block
+它通常就是會擺在比較附近的地方
+因為那種互相之間可能有連線
+所以這個是
+就是直覺上我們大概就會這樣做
+沒有錯啦
+然後我們可能會去旋轉這些Macro
+去讓它調整它的那個Pin的方向
+這個也蠻直覺的
+比如說這個Macro
+它的Pin就是出在下面的地方
+那我們當然不會把這些Pin朝著上面放
+變成說它
+因為這些Pin它是要連線
+主要是要連到Code裡面的連線
+所以就把它旋轉
+這個應該也是蠻直覺的工作
+那再來是
+在擺Macro的時候
+我們大概需要保持距離
+保持一些Space
+讓Power或是Signal可以繞線
+比如說左上角這些Macro
+它有好幾個Macro
+那我們這些Macro它可能會需要出來連線
+所以中間當然是我們會需要留一些Channel
+讓它可以連線
+那兩個Macro它的出Pin的方向互相相對
+它們其實就可以共用中間的那個Channel的位置
+在Area使用上其實就會比較有效率
+如果共用的話
+它們其實會比較不會多浪費一些額外的Channel
+然後
+留這些Channel它的目的除了剛才提到的Signal繞線之外
+另外還有Power繞線的考量
+Power繞線的意思是說
+第一個我的Power一定要能夠供應這些Block
+所以我可能根據這些Block的Power連線的狀況
+我可能需要畫一些額外的Powerline在它的周圍
+或者是說Block和Block中間有一些Channel
+就剛才提到的這些Channel
+這些Channel除了是拿來當Memory繞線之外
+它其實還有一個很重要的工作是
+它要預留給Tour解決Time問題的空間
+什麼意思就是說Signal在繞線的時候
+它其實需要繞很長的線
+假設我有一個Signal它需要繞到某個Io
+那它的線這整條繞線是很長
+那這麼長的繞線它的Loading很重
+所以
+如果我直接用一個Buffer去推動這麼長的繞線
+它的整個Time的Delay就會很長
+那我們會需要在中間加Buffer
+就可能在某些地方需要加一些Buffer
+幫助它去推動這一條訊號
+那因此就變成說我必須要保留一些位置
+讓它有加Buffer的空間
+所以這是Channel另外一個很重要
+必須存在的原因就是它必須要有空間加Buffer
+那比如說左下角這個Block
+這是一個很大的一個Block
+然後假設說我有條訊號一樣從這個地方
+它可能要連接到某一個Io
+然後也許它可以這樣走
+那如果說這個Block底下這個部分沒有保留下來的話
+就變成說這邊的線它就必須要繞很長的線
+然後中間沒有加Buffer的空間
+我的意思說這個Block假設它完全的貼到底
+把這個下面的空間全部都佔掉
+那變成說這條線它就一定要拉這麼長
+那我們也常常看到很多的例子就是
+很長的那個繞線造成說它的Time也很差
+所以噴到一次的話我們大概就知道說
+我應該在某些地方先留一些空間
+到時候它在解Time的時候有機會加一些Buffer進去
+那這個就是需要預留一些空間
+有加Buffer的空間或是加Low Power的空間
+就是這些項目
+那在下我們可能會加Block Hero
+Hero其實是一個Blockage的概念
+我們後面會再講到更詳細的內容
+Hero其實是說我可以把一些Sale
+讓它遠離這個Block
+就是Block和Sale如果靠太近
+它有時候會有雜訊的問題
+或者它可能會有繞線上的問題
+所以我可以把Sale把它推離這個Block
+這種是要說Block Hero
+那我們後面會再解釋
+所以就先這樣子就好了
+再來是我們一般來說
+我們會盡量減少離散的空間
+比如說像右邊這一塊
+右邊這塊可能空了一塊空間
+它跟其他部分比較沒有連關係
+那如果說我的Sale被放到這個地方
+它跟中間區域的連線就會比較有限
+它能夠使用的那個連線就比較少
+很容易就看到說這個地方
+也許就會有Routing Congestion
+就是繞線擁擠的問題出來
+所以我們在擺Block的時候
+會盡量的去避免
+不要有這樣子的機靈的空間
+可以的話就盡量把它塞滿
+或者說真的不行的時候
+我們甚至可能會把它
+用Blockage把它蓋掉
+就是後面會講到Blockage
+所以大概是這個意思
+然後最後一條是
+盡可能的把它擺整齊
+擺整齊這件事情其實蠻重要的
+比如說右邊這堆Block
+右邊這堆Block他們是同樣Type的Block
+所以它形狀都一模一樣
+那我把它擺整齊之後
+這條線這個Channel才會變得很整齊
+因為Power的繞線都是直的和橫的
+就是很乾淨的直線橫線
+那我把Block擺整齊
+那個Power線就會很好拉
+那只要稍微有一個錯開
+搞不好就會有
+變成可能有會DRC跑出來
+那時候就是增加自己麻煩
+所以把Block擺整齊
+一般來說在不管是訊號線
+或是Power線其實都
+都會有蠻大的好處
+所以這些算是一些規則
+就我們常常在做的時候的一些原則
+但是它不是一個路
+它就只是說我們在
+一般我們APR功能是在做什麼
+對朝向這種方向去做
+那在下我們再多舉一些例子
+因為大部分人可能
+還沒有很多的APR經驗
+那麼對FloatPan這件事情
+可能在體會上
+沒辦法這麼深刻的體會
+所以我們盡量舉一些例子
+讓大家能夠稍微
+知道說APR人他在FloatPan
+到底在做什麼事情
+那首先這個例子是一個
+那個SRAM的例子
+就這裡面這個其實是一顆SRAM
+那這個SRAM
+它的它自己帶兩圈率
+就其中一條是VDD
+另外一條是VSS
+就這兩圈率
+其實是這個SRAM它自己帶出來
+就它不是我們在APR的時候
+產生出來的
+那我們在TSR在提供Memory的時候
+我們在E8製程和90製程提供的Memory
+它的那個Memory長相
+大概都像這樣子
+就它自己帶兩圈率
+那這兩圈率
+其中一邊是會用比較高的Layer
+另外一個方向
+比如說水平方向
+它可能用比較低的Layer
+那中間高Layer和低Layer之間
+它會有個VR層
+VR這一層它是一個
+Blockage的模型
+Blockage的意思就是說
+繞線的時候
+必須要避開這些灰色的方塊
+就我在繞線
+不管是Power或是Signal
+都不能去Touch到這些Blockage
+這個是Blockage的意思
+那這樣子的Memory
+有些人覺得說它Power很容易連線
+那有些人發現說它的Power很難拉
+為什麼會有這麼大的差別
+其實主要的問題
+有在於說它的方向
+只要轉個90度
+問題就會變得不一樣
+那現在這張圖就是一個錯誤的方向
+就因為這個S-Range擺在中間
+然後水平的方向是這個方向
+水平 用水平線去連這個Block
+連接這個Block
+它我們靠的是File Pin
+File Pin就是Standard Cell的那個
+Standard Cell最底層的Metal 1
+Standard Cell在Standard Cell上下連線的Pin
+實際上Standard Cell是在這個地方
+然後它的VDD Pin是
+VDD Pin串連出去的那個連線
+就叫File Pin
+那File Pin是比較底層的Layer
+所以我們就用這個底層的Layer
+穿到這個Metal底下
+然後再往上連接的時候
+就很容易去碰到這些Blockage
+所以這些File Pin很有可能說
+它就沒辦法直接連上去
+因為對Tool來說
+它的連線就是一條直線穿過去
+然後就要往上連
+這樣子就就是它的工作
+那如果說它這個直線直接穿進去
+然後往上連上去的時候
+會碰到障礙物
+那個Tool它就沒辦法解
+它就這個地方可能就會有斷線
+就有一個叉子
+我們就會看到一個叉叉在一個地方
+那垂直部分連線也是一樣狀況
+垂直線我們通常是用比較高的Layer
+用比較高的Strip去做連線
+就比如說Metal 4
+那Metal 4的Layer從上面
+跨到這個X-Ring上方
+然後它要再往底下去連接這個Ring的時候
+它也一樣很容易去碰到這個Blockage
+所以一樣這個Strip的連線
+也沒辦法連得很漂亮
+那因此這個
+這個就是
+兩邊不管是垂直線或是水平線的連線
+其實都會有問題
+那怎麼解決
+解決方式其實
+就只要把它轉個90度就有解決了
+我們現在看到這個垂直的這個Ring
+它是比較高的Layer
+那水平的這個方向的Ring
+它是比較低的Layer
+那如果我們把它反過來
+就垂直的Ring變成比較低
+水平變得比較高
+就變成下一頁的狀況
+就變成說
+我現在
+垂直的部分是比較低的Layer
+所以我這個Metal 1的發發片一樣
+它可以鑽到底線去
+鑽下去之後再往上連接
+不管是內圈Ring或是外圈Ring
+都很容易可以直接連上去
+因為它中間沒有任何障礙物
+那高的這個Strip也是一樣
+它往上面跨上來之後
+往下連接
+也是還可以很順利的去直接連上
+所以這個其實意思就是說
+有時候這個Power的連線
+它跟那個方向就有關係
+我只要稍微轉個方向
+它在連線上面就會有不一樣的狀態
+就是一個第一個例子
+然後第二個By Blocker的例子是一個
+那個SRAM BUS的例子
+那這個Design它是
+它使用到了兩顆很大的
+Data Bus的WIS的SRAM
+比如說它可能需要一個2048PIN
+Data Bus是2048PIN的SRAM的Memory
+但實際上我們的SRAM提供的IP
+可能沒有這麼寬的Data Bus
+我們可能最寬的那個
+最寬的Bus可能就只有512PIN而已
+所以我們可能就可能用了四顆相同的SRAM
+把它組合起來
+變成是一個邏輯上的SRAM
+就變成我們Design的需求就可以達到
+然後這個Design它同樣的SRAM
+它用了兩套
+然後這兩套可能可以用一個Max去做切換
+就選擇我現在要用SRAM A或是SRAM B
+這是在邏輯上的那個結構
+所以對於這樣子的設計
+我們在擺Memory的時候
+就擺這些Memory的時候
+我們可能很容易的就覺得
+這四個Memory它是屬於一國的
+那我們就把它放在一起
+那另外的把它放
+另外SRAM B也是把它放在一起
+那我們發現說這樣子擺出來的結果
+它很可能在中間地方就會有可能去選擇問題
+因為這些Data往外拉出去之後
+它都需要連接到
+都會拉需要拉到中間去
+所以我在中間就會需要有4096條線
+往內期中然後再選擇選出去了
+所以這邊就會有很多的那個連線
+需要在這邊拉線
+那很可能在這個地方就有Contribution的問題
+就我在這邊繞線太擁擠
+一來它可能就影響到這邊的Timing的最佳化
+因為Timing它會需要足夠的空間
+才可以還有辦法做最佳化
+那如果它真的繞線很嚴重
+繞不出來它可能就要把這個區域再放大
+讓足夠的Louding Resource來使用
+這樣才有辦法連線連出來
+可是如果我們在擺這些Block的時候
+先看到這個問題
+我們可以擺成右邊的狀況
+就我們可以把比較低的那些DataBus的SRAM
+把它放在一起
+那比較高的Bit的那些SRAM把它放在一起
+所以在Select的時候
+低的SRAM加低的SRAM
+它可以自己就可以做Select
+那高的可以自己做Select
+這樣子我們就不用把全部的Signal
+都集中在一個地方
+那所以
+這樣的Contribution問題就自然就解決了
+所以
+所以這個例子應該是說
+擺這些Block的Order有時候也是一個重點
+就是有時候我們如果看得到它的Signal走向的話
+那我們大概可以去安排說
+它怎麼樣的擺法
+它可以得到比較
+比較好的那個Louding Contribution
+比較低的結果
+所以Blocker Placement
+我們其實就只有這樣子
+那基本上
+它Blocker主要還是要靠Tool去擺放
+就我們前面講到
+Tool它自動有Auto Placement的做法
+那我們大部分狀況
+我們可能就是把一些比較重要的
+或者說我們看得出來它的那個
+它的位置的那些Blocker先把它固定起來
+那剩下的部分就是主要是靠Tool去擺
+因為有時候一個Delay
+用到一兩百顆SRAM
+要一個一個擺其實也是蠻辛苦的
+所以主要也是靠Tool去做
+然後有些IP像是那種
+PL或者是DDR
+這種IP是它比較需要固定在某個位置
+但是它可能比較需要
+比如說有些可能是需要在Io的位置
+就因為它是屬於Io的IP
+那PL可能比較需要固定在
+邊界的中間的位置
+那些IP就變成是
+大部分來說都是手動自己Fix下來的
+就我們就把它固定下來之後
+剩下的SRAM就還在交給Tool去擺
+然後再下來我們講到的
+一樣在講FloorPan
+那我們這邊的物件叫做Blockage
+Blockage的意思就是障礙物的意思
+就我們可能會利用一些障礙物
+去引導Tool去避免它說
+避免它做一些不對的問題
+不對的工作
+因為Tool其實它還蠻笨的
+就是它就是我們給它什麼東西
+它就會盡量的把那個工作完成
+然後它如果說
+如果說我們可以預期說
+它在某些地方
+做了某些事
+然後它可能會有
+Louding上會比較
+最後後面的Louding會比較
+遇到問題
+那我們可以實現就把那些問題先避免開
+就不讓它去
+朝這個方向去執行
+所以我們第一個我們講到就是
+President Blockage
+所謂的Blockage就是
+到時候被擺上去的這個Blockage底下
+它就不能放Sale
+所以我們可能講
+這種Blockage我們叫做Hard
+Hard Blockage的意思就是
+當我在Layout上畫了某個空間之後
+在這個區域它就不能擺放Stay-at-Sale
+那我們直接拿後面圖當解釋
+什麼狀況
+比如說像
+這個Channel
+剛有提到過說
+Blockage和Blockage中間
+我們可能會需要留一些Channel
+所以這個地方
+我可能留了一個Channel在一個地方
+但有時候這個Channel不是故意留
+它可能是這兩個Blockage
+它們的DRC的一些要求
+所以它要求中間
+它可能不能完全併在一起
+所以它可能會有一些空隙在這地方
+那只要有這些空隙
+我們就必須要想辦法把Power拉進去
+因為Stay-at-Sale
+它就有可能會被擺到這個Channel裡面去
+那因為Stay-at-Sale有可能被擺進去
+我們就必須要想辦法把Power
+拉到這個Channel裡面
+意思是Ship的意思
+我們的Ship就必須要長在裡面
+那有些時候
+這個Channel可能位置的問題
+或是它實在太稀了
+那我們的Ship長不進去
+就不容易拉進去
+那這種狀況怎麼辦
+如果說這個Channel
+這個地方Power拉不進去
+那只要Sale被擺進去之後
+這個Sale就完蛋了
+它就沒有Power可以使用
+所以這個時候
+我們就可以把這個地方把它Block掉
+如果說我希望這個位置
+不要放Stay-at-Sale
+Stay-at-Sale不要被擺到裡面
+那我可以就HardBlockage把它Block掉
+所以這個就是HardBlockage的意思
+就是我不要讓這個地方擺Sale
+那我就可以用Blockage把它蓋掉
+然後第二個講到的是Solt-Blockage
+Solt-Blockage的意思是說
+在這種Blockage底下
+一開始Sale是不能用的
+就一開始的InitialPressment
+Tool不能把Sale
+放到這個Blockage底下
+但是在後面的階段
+比如說TimingAltimizer
+或者是Clutch訊息那些
+這個時候就可以使用這個區域
+像我們剛剛提到的
+我們Block中間其實會有Channel
+但是這個Channel
+這些空間
+我可能不是為了讓Pressment使用的
+主要的目的是為了讓Tool有地方可以加Buffer
+所以這個地方的空間
+我們還是留下來
+讓Tool可以放Buffer在這個地方
+但是如果Tool一開始就把Sale
+就把它擺進去
+那些LogicSale
+就那些有功能的Sale
+一開始就把它擺進去
+擺得太多
+有可能就造成這邊的Content選太嚴重
+就Channel留出來的位置的Content選
+可能就太嚴重
+所以我們可能不希望Tool
+一開始就把Sale放到裡面去
+就是說它在Pressment的時候
+我們不希望它把元件擺到裡面
+所以這時候就很明顯
+我們就需要加Solt-Blockage
+Solt-Blockage的意思就是這樣
+剛Tool第一次在Pressment的時候
+是不能使用現在黃色的這些空間
+被黃色包起來的這些位置
+我不是讓Tool Press用的
+我只是為了加Buffer用的
+所以Pressment的時候
+就只能用體壓的部分
+Pressment完以後
+我們可能會需要修Timing
+需要加Buffer
+或者說需要長Cut Tree
+那時候軟體Tool就可以使用
+這些黃色的區域
+就這個很明顯就是Solt-Blockage
+它這個角色它的功用
+其實就是這個作用
+那另外一個狀態
+就另外一個狀態是
+有些時候我們可能希望
+Tool擺一些Logic Sale在裡面
+比如說我可能有這些
+外面的這些訊號
+它可能只要經過一些
+簡單的Logic運算
+它拉出來的訊號
+就可以變得比較少
+或者說上面這邊比較多Pin
+我這邊這麼多的Pin
+我可能它實際上在裡面
+可以做一些比較簡單的Logic運算
+然後它出來的訊號
+就可以變得比較簡單
+那這時候我們可能會希望說
+Tool一開始在做Pressment的時候
+就可以先把部分的Sale
+擺在這種Channel裡面
+那這時候怎麼辦
+因為Solt-Blockage
+就會直接的全部都折蓋掉
+所以我們這時候
+我們就可以換另外一種Blockage
+叫做Partial Blockage
+Partial Blockage的意思是說
+這個區域可以使用
+但是我希望它不要被用的這麼多
+比如說我可以設定一個比例
+我希望Tool只用到5%的比例
+就它使用率不要這麼高
+就它可以擺一點點Sale在裡面
+但是不要用這麼高
+這叫Partial Blockage
+所以如果我們剛剛提到那個例子
+我如果希望
+有一些Logic Sale
+可以被放在這個區域
+那這個時候
+它這個地方就不能放Solt-Blockage
+我們可能就換成是Partial Blockage
+讓部分的Logic Sale可以放在這裡
+那到時候出來的需要
+搞不好可以變得比較少
+或者它的Timing就可以
+可以因為我的Sale有先費放到裡面
+沒關係
+所以它的Timing可能可以變得更好
+所以Partial Blockage有點像是
+Solt-Blockage再放鬆一點
+就它讓那個Place來
+所以可以適當的使用這樣子的空間
+那只是說Partial Blockage
+有可能需要兩段式使用
+就變成說
+一開始我希望它不要放這麼多
+所以就放Partial Blockage
+那Partial Blockage完以後
+我們可能就要手動
+再把這個Partial Blockage把它拿掉
+因為那個時候
+Partial Blockage完以後
+就是Ultimate的問題了
+所以如果說我在這地方
+還是維持著那個
+這個比較低的使用率的話
+Ultimate可能就沒辦法
+用到這裡面的空間
+所以我們變成是要
+Place完以後再把這個
+Partial Blockage再把它移除掉
+變成說它流程上可能就會多一點補充
+那最後這個Maker Only
+是跟那個AutoPlaceMaker有關係
+它就是這個部分
+就譬如說我在某個地方
+框出一個Maker Only的Blockage
+表示說這個區域不能擺放
+Block 不能擺放這些Maker
+它其實是影響到前面的那個AutoPlace
+就是自動擺放Maker的那個功能
+所以
+應該不用再太多解釋了
+所以這個算是
+Place and Blockage的介紹
+然後另外一種Blockage叫Routing Blockage
+Routing Blockage應該也很好理解的
+它就是不能繞線的意思
+只是說我們指定某個區域不能繞線
+我們還要告訴它說
+是哪些Layer不能繞線
+是全部的Layer都不能繞線
+還是說固定某一些Layer不能繞線
+因此我們在產生Routing Blockage
+就要去指定
+指定說到底哪些Layer不能做
+怎麼用
+就這邊也給了一個Routing Blockage
+使用的例子
+當然使用的情境上不限於我們舉例的這些例子
+這只是
+讓大家稍微再有一點概念這樣子
+那這個例子是一個PowerPad連接出來的位置
+所以PowerPad它可能是在左邊這個地方
+然後PowerPad連到PowerIn上面
+就這邊這幾條是其實我們的PowerIn
+就PowerPad連接到PowerIn
+它可能有很多條連線會連接到PowerIn上面
+然後對於這樣子的區域
+我們常常會遇到一個問題是
+在長那個PowerShip的時候
+水平的PowerShip
+因為現在這個是水平的方向
+水平的PowerShip在長的時候
+變是右上角是這樣圖
+它會Ship它會盡量的連接到所有的Rin
+所以Ship在連線上過來的時候
+它會盡量的把所有的Rin都能夠連的地方都把它連滿
+那我們有時候會遇到一個問題是
+這些連進來的Ship它造成額外的DRC
+比如說這個Ship跟這個PadPin這個Spacing
+它也許沒有算好
+那這裡可能會有額外的DRC
+或者是說像下面這個例子
+這個原本的PadPin是這麼寬的PadPin
+那因為在Ship加進來之後
+這個位置這個地方就變更寬了
+所以我原本這邊的寬度如果是4mic
+那因為這個PowerShip加進來之後
+它冷變成4.5mic
+那多這一點點有什麼關係
+因為常常我們遇到一個狀況是
+中間的這個Spacing就Pin和PadPin之間的這個Spacing是算好的
+這個Spacing它剛好就是4mic的時候的Spacing
+就是因為底下如果有一個狀況是
+當Metal的寬度越寬的時候
+它的需要的Spacing有時候會需要更大的Spacing
+所以我如果這個中間Spacing它剛好就是4mic的Spacing
+就4mic寬度的Metal的Spacing
+當這個Metal因為不知道什麼原因變寬變得更寬
+那這時候這個Spacing就不夠了
+變成說我的DRC問題就會
+這邊可能就會有Spacing的DRC的violation
+那APR2在檢查DRC其實是一個取巧的檢查
+它很容易去忽略掉這種問題
+它沒辦法在繞線過程當中去完整的檢查所有的DRC
+所以有時候我們遇到這種情形
+就變成在展完Strip之後必須要把產生DRC的那些Routing
+產生DRC的那些Strip把它手動刪除掉
+可能需要額外做一些工作
+如果說我們懶得去做這件事情
+每次做它就會跑一些一點點就幾個DRC出來
+我們懶得每次都去針對這種問題去修的話
+那我們有一種做法就是我可以事先的在這個Pin上面
+用Routing Bracket把它造起來
+所以我可能事先的就在這個地方就先用Bracket把它遮起來
+遮起來之後Metal Pulse Strip它就不能拉進去
+因為我Bracket已經蓋上去了
+所以Pulse Strip它就沒辦法拉進去
+它可能就會斷在某個地方
+那Pulse Strip斷掉其實沒有關係
+其實我們不強求所有的Strip都要完整的連接到Ring上面
+就有些Strip雖然它斷掉了
+可是它在裡面的部分裡面就Coreal裡面的連線還是有用
+還是會連在一起
+所以它還是有作用
+所以我們可以用這種方式去避免掉這些Strip拉到這個PadPin連接的區域
+沒有拉進去它自然就沒有DRC的問題了
+這個就是一種使用方式
+假設我們這樣使用之後
+在展完Strip之後就要記得把這個Routing Bracket再把它移除掉
+因為如果不移除掉的話
+酷額在檢查就會發現說這個Bracket跟裡面的這些Metal有Short的問題
+所以我們就要變成在展完Strip之後
+要記得把這些Bracket再手動拿掉
+所以這是一個使用Routing Bracket的例子
+所以大家應該有一些概念
+有時候這些Bracket它可能只是為了我們的方便性
+我們為了減少流程上的問題
+為了避免它不小心產生一些DRC或是Routing Cartesian的問題
+所以我們就事先的把一些容易出錯的地方先把它蓋掉不要讓它用
+這樣子整個流程上其實就會變比較順暢
+我們減少需要手動去修正的機會
+接下來我們再講到另外一個物件叫做Hero
+Hero其實就是Bracket的意思
+就跟我們剛剛提到的President Bracket還有Routing Bracket是類似的意思
+Hero它是在Bracket周圍的物件
+我們可以選擇某一個Bracket
+在這個Bracket周圍產生出這個Hero
+就產生出這個Bracket的光環出來
+它可以分成President Hero或是Routing Hero
+President Hero指的是President Bracket
+它的功用就是當我Bracket周圍加上Hero以後
+Sale在擺的時候就會被推開來
+Sale就不會靠得這麼近
+這個其實也是一堆原因
+有些Bracket會要求說Sale一定要Clear
+它的進空的空間一定要至少在多少距離以外以上才可以放Sale
+所以它有可能是雜訊干擾的問題
+所以必須要把它推開來
+也有可能是Condition的問題
+因為Bracket的角落地方其實是比較容易產生Condition的位置
+所以如果說我們的Routing容易在這地方有Condition
+我們也可以用Hero把它推開
+這是President Hero
+另外舉的一個例子是Hero影響到FilePin連線的例子
+這個不只是Hero
+其實President Bracket也是有一樣的效應
+如果它在長FilePin的時候
+所謂的FilePin是Standard Sale的Pin
+現在這些線是Low
+Standard Sale的Code裡面的Low
+Standard Sale是擺在這個Low上面
+當我沒有Bracket在上面的時候
+Tool它會預期說所有的這些Low都有可能會被擺Sale
+所以它會盡可能的在每一個Low上面全部都長滿FilePin
+所以結果會一樣右邊一樣
+就只要有Low的地方
+它就必須要長FilePin
+再確保說每一個Sale
+只要一放進來這個Sale它就有電源可以使用
+所以這個是我們不使用Bracket的狀態
+像這個狀態的話
+FilePin長進來之後
+到最後它會需要連接到一個連接
+最後的連接的終點
+所以它可能就需要跳到Bracket上面去找到連線
+右邊這個是一個Bracket
+這就是一個Bracket
+這個Bracket的Pin長在上面
+所以這個Standard Sale需要跳到比較高的Low
+再連到Bracket裡面的Pin
+有些時候DRC就會出現在這種地方
+因為這邊的連線變得比較複雜
+所以有時候它如果連得不好
+DRC就會出現在這種位置
+如果說這個Bracket本身有帶Hero
+就像左下角這張圖
+如果說這個Bracket它本身有帶Hero
+有帶Hero以後
+這個地方就是不放Sale的位置
+因為它是Hero,它是President Bracket
+所以這個地方就是不會擺Sale的位置
+所以FilePin最後的端點
+它就只要連接到這邊就好了
+實際上FilePin它就只要長到這邊就可以了
+所以它長到這邊以後
+後面再繼續就是
+它會想辦法找到一個最後的連接的端點
+它只要找到BDD或是VSS的線
+它就連上去以後
+它就不會再死著穿到Bracket裡面去
+那這樣子
+因為這邊的連線比較乾淨
+所以就
+這邊可能就比較不容易出現DRC的問題
+所以這也是一個例子
+Bracket影響到FilePin的長相的一個例子
+那另外Hero也出了President Bracket
+除了President Hero之外
+另外也可以做Routing Hero
+Routing Hero一樣是在Bracket的周圍
+但是它的行為跟Routing Bracket比較不一樣
+所謂的Routing Hero的意思是說
+它在這個Hero裡面的繞線的Cost比較高
+所以Tool會比較傾向不在裡面繞線
+那我們先來講這個例子
+這個例子上面這是一個Bracket
+它是一個Harmaco
+然後這Harmaco它有一個出Pin
+出Pin就是連接到Code裡面去
+然後我們有常常會看到說
+在Harmaco的周邊周圍它在連線上面
+它可能會很靠近這個Harmaco連接到這個Maco的Pin
+可是一個Harmaco裡面它可能有一些Y Metal
+比如說它這邊的Metal很寬
+這Metal很寬
+所以它這邊需要的Spacing可能就是需要比較大的Spacing
+那Tool在做繞線的時候
+它是用最小的Spacing去做計算
+所以主要原因是因為
+Tool它看不到Maco裡面的內容
+因為對APR Tool來說
+這個Maco裡面是一個看不見的地方
+所以它也不曉得說這邊是需要比較寬的Spacing
+因此Tool不會發現說這邊會有DRC的問題
+它在繞線過程當中完全沒有這種感覺
+可是實際上這邊的DRC
+這邊的Spacing可能不夠
+那我們在繞完線之後去做
+Repair Slayout之後的DRC
+那時候就會發現說可能這地方有DRC錯誤
+變成手動要去修這條線
+那要怎麼樣去避免這個問題
+做法就是加Routing Halo
+我們可以在這個Block這個地方
+我一樣先Block在這個地方
+我一樣先把Routing Halo長出來
+CI看到的那個磚塊型的這個Pattern
+它就是那個Routing Halo的位置
+剛剛提到過
+所謂的Routing Halo
+它的意思是說它在裡面繞線的Cost會比較高
+所以Tool會比較不傾向在Halo裡面去做連線
+所以我們就不會看到太多的這種橫向的連線
+在這裡面走線
+它大部分狀況就是在外面
+在外面走線
+走完之後就直接在一口氣直接把它接上去
+這就是Routing Halo
+那就不會出現像前面這樣子
+在很靠近Macro的附近走線
+然後造成說這邊有DRC問題的狀況出現
+OK
+其實Routing Halo和Princess Halo
+我們其實大部分狀況都會做
+我們在做的時候
+就先把自己的Block周圍先把它繞兩圈
+這樣子在整個APR上面就會比較順利
+最後講到的那個Float Planner的物件
+叫做Marge of Contents
+Marge of Contents的意思是說
+我可以設定一些規則
+要求說Tool在Princess Sale的時候受到某些限制
+Default所有的Sale它都沒有任何的Contents
+就Tool它想要怎麼放
+Standard Sale它要怎麼放
+它就怎麼放
+它沒有任何的限制
+那我們可能需要根據一些
+我們可能有些目的
+我們希望它把
+比如說我可能希望它把某些Marge of的元件聚在一起
+我希望這個Marge of的Sale不要被拆散
+它能夠在Princess的時候能夠盡量的放在一起
+這時候我們就可以把它設成是SoftGuy的Concrete
+當我把這個Marge of的Concrete設成SoftGuy的話
+意思就是說這個Marge of裡面的Sale
+它到時候Princess的時候就會不會被拆散
+不會被拆得太開
+不會被拆得太開
+它基本上就會在一個固定的
+就是它們會聚在一起的意思
+這叫SoftGuy
+那另外強烈一點的Contents叫做Guy的
+Guy的Contents的意思是說
+我可能希望說某一個Marge of它被放到Layout上的某一個位置
+比如說這個是我Core Area的大小
+那我可能希望說這個Marge of被放在這個Core Area的左下角的位置
+就把這個Marge of把它抓到這個地方來
+所以Guy的Contents跟SoftGuy比起來就是它多了位置的資訊了
+就它多了一個區域的資訊
+一樣就是我希望說這個Marge of裡面的Sale
+被擺在這個區域裡面
+但是這個Concrete它不是一個很嚴格的Concrete
+就當Tool它在做Precimum的時候
+它發現說某些Sale還是應該要放在超過這個範圍
+超過這個區域的外面的話
+這個Tool是可以這樣子做的
+我們Guy的Contents它沒有限制說Tool你一定就要完全放在裡面
+它還是可以部分的超出這個範圍
+就這是一個Guy的Contents
+那另外不在這個Guy的那些Sale
+如果需要被放到這個Sale領
+需要被放到這個區域裡面
+這件事也是允許的
+也就是說Guy的只是一個大概座標定義的意思
+我只是大概定義說這個Marge of它大概要放在這個位置
+那這個範圍其實不是這麼重要
+它不是一個銅牆鐵壁
+它其實是可以有不同的形狀
+Tool還是可以稍微放出去一點沒關係
+強烈一點的Contents就叫Region
+Region的意思就是比Guy的再更嚴格一點
+它的意思是說在這個Region裡面的Sale
+它就一定只能放在這個區域裡面
+被指定在這個Region裡面的那些原件
+一定只能放在這個區域裡面
+它絕對不可以超出這個範圍
+這叫Region
+但是其他不屬於這個Region的Sale
+需要的話還是可以被放在裡面
+最後是Fence
+最嚴格的狀況就是
+在這個Fence裡面的Sale一定只能放在裡面
+不可以超出去
+在Fence外面其他的Sale也只能放在外面
+絕對不能被放到這個區域裡面
+這個叫Fence
+所以這種Contents我們就叫做Marge of Contents
+Marge of Contents它算是對Pressment的一些控制
+一般來說
+Marge of Contents算是比較少用到
+相對於前面的Blockage或是Hero
+或是擺那些Block來說
+Marge of Contents算是比較後面的流程才會用到
+表示說我們可能在做完前面的Block擺放之後
+也許稍微跑過一次的APR
+會發現說是不是某些Marge of Contents
+強迫它擺在某個位置
+某些位置這樣子
+整個路線上可能會變得比較順利
+那時候我們就會再提供這種Marge of Contents給它
+就是我們可能整個流程都已經Run過一次
+然後對整個Delay的Contents選位置比較有概念
+或是說對Marge of Contents會擺的位置稍微有概念
+那時候才在檢討說我是不是可以再去
+加上更多的Contents讓Tool一口氣就直接做得比較漂亮
+大概會比較傾向那種狀況
+通常我們在做的時候也比較
+不會去用到Fence的Contents或是Region的Contents
+因為這種Contents在Place上面的限制就比較強烈
+它已經限制說某個Sale一定要被放在什麼地方
+強烈的限制不代表就是正確的Contents
+所以我們通常就是還是要保留一些彈性讓Tool來使用
+所以以上就是Full Open的介紹
+接下來我們就直接再講Power Plan好了
+Power Plan在Full Open做完之後
+我們的Block其實就會被固定下來
+固定下來之後我們就可以去做電源的規劃
+在做電源規劃之前
+我們大概會需要先把Io的部分先處理好
+我們IoPad擺完之後
+其實Pad和Pad之間會有一些空隙
+這個空隙需要把這些Pad的Ring連接起來
+我們連接Pad的Ring的方式是加IoFeeder
+就是用這種IoFeeder把它連進去
+因為IoFeeder本身有帶這些Powering的連線
+所以當我們把Pad和Pad之間的空隙全部都塞滿之後
+Io的Powering就會自動的被連接起來
+每個Design的Pad和Pad的空隙都不一樣
+中間的空隙其實每個Design的大小都不一樣
+所以實際上在Library裡面會提供各種大小的Feeder
+我們會有很大的Feeder然後有很小的Feeder
+所以在塞的時候會從比較大的Feeder開始塞
+比較大的Feeder塞完之後
+剩下的空隙是大Feeder塞不下去
+那就換比較小的Feeder去塞
+有可能會遇到說剩下的一點點空間
+最小的Feeder都塞不進去
+可是Padroom必須要完整的連接起來
+所以我們在塞最小的Feeder的時候
+就會呼叫另外一個功能叫FeederAnyGap的功能
+Tool它就會用Feeder和Feeder互相重疊的狀況來連接
+把所有的空隙全部都塞滿
+它會用Feeder和FeederOverlapped的做法
+把所有的空隙都塞滿
+因為每個Design它加Feeder的工作大部分都是一樣
+都是從最大Feeder一直塞到最小的Feeder
+所以大部分的情形我們其實是先把這些指令都直接先寫好
+然後一次去執行吧
+它就會自動的從最大Feeder一直塞到最小的Feeder
+然後Io部分搞定了之後
+接下來我們就要做Core裡面的Rin
+Core裡面的Rin Power的Plan
+在講之前我們先補兩個知識
+我們有一些知識是需要先了解的
+第一個是LowBase的APR
+LowBase的APR的意思是說
+Standard Cell在設計的時候
+它的高度都會設計成相同的高度
+那它擺放在我們的Core的Area的時候
+它其實都是擺放在一個固定的座標上面
+固定的位置
+也就是我們的Low上面
+這個Low其實它的高度就跟Standard Cell的高度一樣
+Standard Cell在擺的時候固定只能擺在CoreLow上面
+主要的目的是為了讓這個cell擺得很整齊
+擺整齊之後它的Power才會比較好連接
+其實它的Signal連線也才會比較容易連接
+這個叫LowBase的APR
+大家先要有這樣的認知
+就是這樣的知識
+另外一個需要先知道的就是LowTingPitch
+Pool為了要節省它的運算量
+所以它的Low線的做法是
+它事先在APR的上面
+在我們的帶上面先把可以Low線的Grid先規劃出來
+所以這個紅色線就表示它可能是Metal2的Low線的位置
+表示Metal2只能在這個紅色線上面做Low線
+那因為這個線的Pitch
+這個LowTingPitch是它已經時間算好的
+所以它在上面Low線就比較不容易產生DRC的問題
+因為它不需要一直去擔心跟旁邊線的Spacing夠不夠
+這樣子Low線上的速度才會夠快
+這種叫做LowTingGrid或LowTingPitch
+另外一個概念叫做DefaultDuration
+DefaultDuration的意思是說
+Tool在做垂直Low線的時候
+它Default會用偶速層的線去做Low線
+然後做水平Low線的時候
+Default會用激速層的Layer做Low線
+所以假設它從這個地方連線連接到另外一個地方
+它在做垂直線的時候
+它就會做偶速層的線
+那它需要換到水平線的時候
+它不會用同一層的Layer直接拉過去
+它會先換到激速層的Layer拉過去以後才接上去
+那它的優點就是水平線和垂直線絕對不會Short
+這樣子一樣就是為了節省整體的Low線上的運算
+所以它做了一些
+CellBase的Low線其實就做了一些這種DefaultDuration的限制
+那講這個的原因就是
+到時候我們做PowerPlan的時候
+就盡量的去Follow這些規則
+就我們會有DefaultDuration的這種規則
+或是我們在算LowTing的數量的時候
+也是用這種LowTingPitch的數量去計算
+那我們先休息一下
+到20分鐘再繼續上課
