@@ -1,15 +1,16 @@
-1. The first step is to choose the concept you want to understand. Take a blank piece of paper and write the name of that concept at the top of the page.
-	先將想要理解的概念寫在一張白紙上
+1.  The first step is to choose the concept you want to understand. Take a blank piece of paper and write the name of that concept at the top of the page.
+    先將想要理解的概念寫在一張白紙上
 
-2. The second step is to write out an explanation, as if you were teaching it to someone who didn't understand the subject. This is crucial because in explaining to yourself the ideas you already understand, as well as the ones you don't, you gain a better understanding and pinpoint exactly the details you don't understand.
-       假設你要向別人解釋這個概念，你會怎麼說明。將說明文字寫在紙上。
-3. Whenever you get stuck, go back to the reference materials, lectures or a teacher assistant and re-read or re-learn the material until you do get it enough that you can explain it on the paper.
+2.  The second step is to write out an explanation, as if you were teaching it to someone who didn't understand the subject. This is crucial because in explaining to yourself the ideas you already understand, as well as the ones you don't, you gain a better understanding and pinpoint exactly the details you don't understand.
+    假設你要向別人解釋這個概念，你會怎麼說明。將說明文字寫在紙上。
+
+3.  Whenever you get stuck, go back to the reference materials, lectures or a teacher assistant and re-read or re-learn the material until you do get it enough that you can explain it on the paper.
     如果某些部分你講不清楚，去查詢參考資料，直到你能解釋清楚為止。
 
-4. Wherever you create a wordy or confusing explanation, try to either simplify the language, or create an analogy to understand it better.
+4.  Wherever you create a wordy or confusing explanation, try to either simplify the language, or create an analogy to understand it better.
     試著用更簡單易懂的語言或是類比去描述你想說明的內容。
 
- If you're trying to **understand** an idea, you can walk through this technique very slowly to pinpoint exactly what you don't understand, so you can go to the textbook, lecture notes or a teacher and figure out exactly what detail you're missing. 
+If you're trying to **understand** an idea, you can walk through this technique very slowly to pinpoint exactly what you don't understand, so you can go to the textbook, lecture notes or a teacher and figure out exactly what detail you're missing.
 
 如果你的目標是理解這個概念，則專注於第2和第3步驟。
 

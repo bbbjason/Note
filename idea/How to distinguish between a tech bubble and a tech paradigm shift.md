@@ -1,2 +1,2 @@
-- **Tech bubble:** Is a temporary phenomenon that is driven by speculation and irrational exuberance.
-- **Tech paradigm shift:** Is a more permanent change that is driven by technological innovation and market forces.
+*   **Tech bubble:** Is a temporary phenomenon that is driven by speculation and irrational exuberance.
+*   **Tech paradigm shift:** Is a more permanent change that is driven by technological innovation and market forces.
